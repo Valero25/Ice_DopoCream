@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Fruit
+comment0.text=\r\n\ Representa\ una\ fruta\ en\ el\ juego\r\n\ SRP\:\ Solo\ maneja\ el\ estado\ de\ la\ fruta\ (tipo,\ posici\u00F3n,\ si\ fue\ recolectada)\r\n
+comment1.params=type\ position
+comment1.target=Fruit(java.lang.String,\ Position)
+comment2.params=
+comment2.target=java.lang.String\ getType()
+comment3.params=
+comment3.target=Position\ getPosition()
+comment4.params=
+comment4.target=boolean\ isCollected()
+comment5.params=
+comment5.target=void\ collect()
+comment6.params=pos
+comment6.target=boolean\ isAt(Position)
+comment6.text=\r\n\ Verifica\ si\ el\ jugador\ est\u00E1\ en\ la\ misma\ posici\u00F3n\ que\ la\ fruta\r\n
+numComments=7

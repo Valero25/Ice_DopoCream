@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=EnemyMovementPattern
+comment0.text=\r\n\ Patr\u00F3n\ de\ movimiento\ para\ enemigos\r\n\ SRP\:\ Solo\ maneja\ los\ patrones\ de\ movimiento\ predefinidos\r\n\ Open/Closed\:\ Se\ pueden\ agregar\ nuevos\ patrones\ sin\ modificar\ c\u00F3digo\ existente\r\n
+comment1.params=rows\ cols
+comment1.target=java.util.List\ getTrollPattern(int,\ int)
+comment1.text=\r\n\ Genera\ el\ patr\u00F3n\ de\ movimiento\ del\ Troll\ (movimiento\ por\ el\ borde)\r\n\ El\ Troll\ se\ mueve\:\ (0,0)\ ->\ (0,9)\ ->\ (6,9)\ ->\ (6,0)\ ->\ (0,0)\r\n\ @param\ rows\ N\u00FAmero\ de\ filas\ del\ tablero\r\n\ @param\ cols\ N\u00FAmero\ de\ columnas\ del\ tablero\r\n\ @return\ Lista\ de\ posiciones\ en\ el\ patr\u00F3n\r\n
+numComments=2
