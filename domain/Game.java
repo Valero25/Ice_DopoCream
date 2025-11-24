@@ -2,32 +2,23 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Representa una partida del juego
- * SRP: Coordina el tablero, jugadores, enemigos, frutas y reglas del juego
+ * SRP: Coordina los managers especializados y las reglas generales del juego
  */
 public class Game {
     private Board board;
     private Player player1;
     private Player player2;
     private int level;
-    private List<Enemy> enemies;
-    private List<Position> trollPattern;
-    private List<Fruit> fruits;
     private boolean gameOver;
     private boolean levelCompleted;
-    private boolean timeExpired;
-    private int grapesCollected;
-    private int bananasCollected;
-    private boolean grapesPhaseComplete;
     
-    private static final int TOTAL_GRAPES = 8;
-    private static final int TOTAL_BANANAS = 8;
-    private static final int TIME_LIMIT_SECONDS = 180; // 3 minutos
-    
-    private int remainingTimeSeconds;
+    // Managers especializados
+    private EnemyManager enemyManager;
+    private FruitManager fruitManager;
+    private GameTimer gameTimer;
     
     // Guardar configuración inicial para reinicio
     private String player1Character;
@@ -43,32 +34,18 @@ public class Game {
         this.level = level;
         this.gameOver = false;
         this.levelCompleted = false;
-        this.timeExpired = false;
-        this.grapesCollected = 0;
-        this.bananasCollected = 0;
-        this.grapesPhaseComplete = false;
-        this.remainingTimeSeconds = TIME_LIMIT_SECONDS;
 
         // Posiciones iniciales
         this.player1 = new Player(player1Character, new Position(6, 0), false);
         this.player2 = new Player(player2Character, new Position(6, 9), isPlayer2Machine);
         
-        // Inicializar enemigos
-        this.enemies = new ArrayList<>();
-        this.trollPattern = EnemyMovementPattern.getTrollPattern(board.getRows(), board.getCols());
+        // Inicializar managers especializados
+        this.enemyManager = new EnemyManager(board.getRows(), board.getCols());
+        this.fruitManager = new FruitManager();
+        this.gameTimer = new GameTimer();
         
-        // Crear dos Trolls con diferentes posiciones iniciales en el patrón
-        Enemy troll1 = new Enemy("Troll", new Position(0, 0));
-        troll1.setPathIndex(0);
-        enemies.add(troll1);
-        
-        Enemy troll2 = new Enemy("Troll", trollPattern.get(trollPattern.size() / 2));
-        troll2.setPathIndex(trollPattern.size() / 2);
-        enemies.add(troll2);
-        
-        // Inicializar frutas (primero solo uvas)
-        this.fruits = new ArrayList<>();
-        spawnGrapes();
+        // Inicializar frutas
+        fruitManager.initialize(getOccupiedPositions(), board.getRows(), board.getCols());
     }
 
     public Board getBoard() {
@@ -88,7 +65,7 @@ public class Game {
     }
 
     public List<Enemy> getEnemies() {
-        return enemies;
+        return enemyManager.getEnemies();
     }
 
     public boolean isGameOver() {
@@ -100,27 +77,27 @@ public class Game {
     }
     
     public boolean isTimeExpired() {
-        return timeExpired;
+        return gameTimer.isTimeExpired();
     }
     
     public int getRemainingTimeSeconds() {
-        return remainingTimeSeconds;
+        return gameTimer.getRemainingTimeSeconds();
     }
 
     public List<Fruit> getFruits() {
-        return fruits;
+        return fruitManager.getFruits();
     }
 
     public int getGrapesCollected() {
-        return grapesCollected;
+        return fruitManager.getGrapesCollected();
     }
 
     public int getBananasCollected() {
-        return bananasCollected;
+        return fruitManager.getBananasCollected();
     }
 
     public boolean isGrapesPhaseComplete() {
-        return grapesPhaseComplete;
+        return fruitManager.isGrapesPhaseComplete();
     }
 
     /**
@@ -132,8 +109,16 @@ public class Game {
     public boolean movePlayer1(Direction direction) {
         boolean moved = movePlayer(player1, direction);
         if (moved) {
-            checkFruitCollection();
-            checkCollisions();
+            int points = fruitManager.checkCollection(player1.getPosition());
+            if (points > 0) {
+                player1.addScore(points);
+                fruitManager.spawnBananasIfNeeded(getOccupiedPositions(), board.getRows(), board.getCols());
+            }
+            
+            if (enemyManager.checkCollision(player1)) {
+                gameOver = true;
+            }
+            
             checkLevelCompletion();
         }
         return moved;
@@ -175,64 +160,10 @@ public class Game {
     public void moveEnemies() {
         if (gameOver) return;
         
-        for (Enemy enemy : enemies) {
-            if (enemy.getType().equals("Troll")) {
-                moveTroll(enemy);
-            }
-        }
+        enemyManager.moveAll();
         
-        checkCollisions();
-    }
-
-    /**
-     * Mueve un Troll siguiendo su patrón de borde
-     */
-    private void moveTroll(Enemy troll) {
-        int nextIndex = (troll.getPathIndex() + 1) % trollPattern.size();
-        troll.setPosition(trollPattern.get(nextIndex));
-        troll.setPathIndex(nextIndex);
-    }
-
-    /**
-     * Verifica colisiones entre jugadores y enemigos
-     */
-    private void checkCollisions() {
-        for (Enemy enemy : enemies) {
-            if (enemy.collidesWith(player1)) {
-                gameOver = true;
-                System.out.println("¡Game Over! El jugador 1 fue atrapado por un " + enemy.getType());
-                return;
-            }
-        }
-    }
-
-    /**
-     * Verifica si el jugador recolectó una fruta
-     */
-    private void checkFruitCollection() {
-        Position playerPos = player1.getPosition();
-        
-        for (Fruit fruit : fruits) {
-            if (fruit.isAt(playerPos)) {
-                fruit.collect();
-                
-                if (fruit.getType().equals("Uva")) {
-                    grapesCollected++;
-                    player1.addScore(10);
-                    System.out.println("¡Uva recolectada! (" + grapesCollected + "/" + TOTAL_GRAPES + ")");
-                    
-                    if (grapesCollected == TOTAL_GRAPES && !grapesPhaseComplete) {
-                        grapesPhaseComplete = true;
-                        System.out.println("¡Todas las uvas recolectadas! Ahora aparecen los plátanos");
-                        spawnBananas();
-                    }
-                } else if (fruit.getType().equals("Platano")) {
-                    bananasCollected++;
-                    player1.addScore(15);
-                    System.out.println("¡Plátano recolectado! (" + bananasCollected + "/" + TOTAL_BANANAS + ")");
-                }
-                break;
-            }
+        if (enemyManager.checkCollision(player1)) {
+            gameOver = true;
         }
     }
 
@@ -240,37 +171,9 @@ public class Game {
      * Verifica si el nivel está completo
      */
     private void checkLevelCompletion() {
-        if (grapesCollected == TOTAL_GRAPES && bananasCollected == TOTAL_BANANAS) {
+        if (fruitManager.areAllFruitsCollected()) {
             levelCompleted = true;
             System.out.println("¡Nivel completado! Puntuación: " + player1.getScore());
-        }
-    }
-
-    /**
-     * Genera 8 uvas en posiciones aleatorias
-     */
-    private void spawnGrapes() {
-        Random random = new Random();
-        List<Position> occupiedPositions = getOccupiedPositions();
-        
-        for (int i = 0; i < TOTAL_GRAPES; i++) {
-            Position pos = getRandomFreePosition(random, occupiedPositions);
-            fruits.add(new Fruit("Uva", pos));
-            occupiedPositions.add(pos);
-        }
-    }
-
-    /**
-     * Genera 8 plátanos en posiciones aleatorias
-     */
-    private void spawnBananas() {
-        Random random = new Random();
-        List<Position> occupiedPositions = getOccupiedPositions();
-        
-        for (int i = 0; i < TOTAL_BANANAS; i++) {
-            Position pos = getRandomFreePosition(random, occupiedPositions);
-            fruits.add(new Fruit("Platano", pos));
-            occupiedPositions.add(pos);
         }
     }
 
@@ -281,41 +184,8 @@ public class Game {
         List<Position> occupied = new ArrayList<>();
         occupied.add(player1.getPosition());
         occupied.add(player2.getPosition());
-        
-        for (Enemy enemy : enemies) {
-            occupied.add(enemy.getPosition());
-        }
-        
-        // Agregar posiciones del patrón de troll para evitar spawn en el borde
-        occupied.addAll(trollPattern);
-        
+        occupied.addAll(enemyManager.getOccupiedPositions());
         return occupied;
-    }
-
-    /**
-     * Genera una posición aleatoria que no esté ocupada
-     */
-    private Position getRandomFreePosition(Random random, List<Position> occupiedPositions) {
-        Position pos;
-        do {
-            int row = random.nextInt(board.getRows());
-            int col = random.nextInt(board.getCols());
-            pos = new Position(row, col);
-        } while (isPositionOccupied(pos, occupiedPositions));
-        
-        return pos;
-    }
-
-    /**
-     * Verifica si una posición está ocupada
-     */
-    private boolean isPositionOccupied(Position pos, List<Position> occupiedPositions) {
-        for (Position occupied : occupiedPositions) {
-            if (occupied.equals(pos)) {
-                return true;
-            }
-        }
-        return false;
     }
     
     /**
@@ -323,14 +193,8 @@ public class Game {
      * Si el tiempo llega a 0, el nivel se considera fallido
      */
     public void decrementTime() {
-        if (remainingTimeSeconds > 0) {
-            remainingTimeSeconds--;
-            
-            if (remainingTimeSeconds == 0) {
-                timeExpired = true;
-                gameOver = true;
-                System.out.println("¡Tiempo agotado! Nivel fallido");
-            }
+        if (gameTimer.decrementTime()) {
+            gameOver = true;
         }
     }
     
@@ -341,30 +205,15 @@ public class Game {
     public void reset() {
         this.gameOver = false;
         this.levelCompleted = false;
-        this.timeExpired = false;
-        this.grapesCollected = 0;
-        this.bananasCollected = 0;
-        this.grapesPhaseComplete = false;
-        this.remainingTimeSeconds = TIME_LIMIT_SECONDS;
         
         // Reiniciar posiciones de jugadores
         this.player1 = new Player(player1Character, new Position(6, 0), false);
         this.player2 = new Player(player2Character, new Position(6, 9), isPlayer2Machine);
         
-        // Reiniciar enemigos
-        this.enemies = new ArrayList<>();
-        
-        Enemy troll1 = new Enemy("Troll", new Position(0, 0));
-        troll1.setPathIndex(0);
-        enemies.add(troll1);
-        
-        Enemy troll2 = new Enemy("Troll", trollPattern.get(trollPattern.size() / 2));
-        troll2.setPathIndex(trollPattern.size() / 2);
-        enemies.add(troll2);
-        
-        // Reiniciar frutas
-        this.fruits = new ArrayList<>();
-        spawnGrapes();
+        // Reiniciar managers
+        enemyManager.reset();
+        gameTimer.reset();
+        fruitManager.initialize(getOccupiedPositions(), board.getRows(), board.getCols());
         
         System.out.println("Nivel reiniciado");
     }
