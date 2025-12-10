@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=FlowerPot
+comment1.params=id\ x\ y
+comment1.target=FlowerPot(java.lang.String,\ int,\ int)
+comment2.params=blocked\ targetX\ targetY
+comment2.target=domain.shared.Direction\ decideMove(boolean,\ int,\ int)
+comment3.params=
+comment3.target=java.lang.String\ getType()
+numComments=4

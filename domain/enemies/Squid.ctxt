@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Squid
+comment1.params=id\ x\ y
+comment1.target=Squid(java.lang.String,\ int,\ int)
+comment2.params=blocked\ targetX\ targetY
+comment2.target=domain.shared.Direction\ decideMove(boolean,\ int,\ int)
+comment3.params=
+comment3.target=boolean\ canBreakIce()
+comment4.params=
+comment4.target=java.lang.String\ getType()
+numComments=5

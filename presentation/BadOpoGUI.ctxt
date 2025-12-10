@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=BadOpoGUI
+comment1.params=domain
+comment1.target=BadOpoGUI(domain.game.DomainController)
+comment2.params=levelFile
+comment2.target=void\ startGame(java.lang.String)
+comment3.params=
+comment3.target=void\ updateGameStep()
+comment3.text=\r\n\ ESTE\ M\u00C9TODO\ SE\ EJECUTA\ 60\ VECES\ POR\ SEGUNDO\r\n\ Es\ el\ puente\ entre\ Dominio\ y\ Vista\r\n
+comment4.params=keyCode
+comment4.target=void\ handleGameInput(int)
+comment4.text=\r\n\ Maneja\ los\ inputs\ que\ vienen\ del\ GamePanel\r\n
+comment5.params=
+comment5.target=void\ initScreens()
+comment6.params=mode
+comment6.target=void\ showCharSelection(java.lang.String)
+comment7.params=
+comment7.target=void\ showLevelSelection()
+comment8.params=level
+comment8.target=java.lang.String[]\ getMockMap(java.lang.String)
+numComments=9

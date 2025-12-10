@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=CharacterSelectionPanel
+comment1.params=loader\ mode\ onComplete
+comment1.target=CharacterSelectionPanel(ImageLoader,\ java.lang.String,\ java.util.function.BiConsumer)
+comment2.params=
+comment2.target=void\ showIceCreams()
+comment3.params=
+comment3.target=void\ showEnemies()
+comment4.params=name\ isPlayer
+comment4.target=void\ addCharacterBtn(java.lang.String,\ boolean)
+comment5.params=e
+comment5.target=void\ mouseEntered(java.awt.event.MouseEvent)
+comment6.params=e
+comment6.target=void\ mouseExited(java.awt.event.MouseEvent)
+comment7.params=e
+comment7.target=void\ mouseClicked(java.awt.event.MouseEvent)
+comment8.params=name
+comment8.target=void\ handleSelection(java.lang.String)
+comment9.params=g
+comment9.target=void\ paintComponent(java.awt.Graphics)
+numComments=10

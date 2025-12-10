@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=HungryBot
+comment1.params=id\ x\ y\ flavor
+comment1.target=HungryBot(java.lang.String,\ int,\ int,\ IceCreamFlavor)
+comment2.params=dt\ playerCtrl\ board\ itemCtrl\ enemyCtrl
+comment2.target=void\ update(float,\ PlayerController,\ domain.board.BoardController,\ domain.items.ItemController,\ domain.enemies.EnemyController)
+comment3.params=playerCtrl\ board\ itemCtrl
+comment3.target=void\ makeMove(PlayerController,\ domain.board.BoardController,\ domain.items.ItemController)
+comment4.params=itemCtrl
+comment4.target=domain.items.Item\ findNearestFruit(domain.items.ItemController)
+comment5.params=targetX\ targetY\ board\ itemCtrl
+comment5.target=domain.shared.Direction\ getDirectionTowards(int,\ int,\ domain.board.BoardController,\ domain.items.ItemController)
+comment6.params=x\ y\ board\ itemCtrl
+comment6.target=boolean\ isValidMove(int,\ int,\ domain.board.BoardController,\ domain.items.ItemController)
+comment7.params=playerCtrl\ board\ itemCtrl
+comment7.target=void\ moveRandomly(PlayerController,\ domain.board.BoardController,\ domain.items.ItemController)
+numComments=8

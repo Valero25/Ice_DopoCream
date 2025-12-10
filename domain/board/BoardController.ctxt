@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=BoardController
+comment1.params=width\ height
+comment1.target=BoardController(int,\ int)
+comment10.params=x\ y\ type
+comment10.target=void\ setMapObstacle(int,\ int,\ domain.shared.EntityType)
+comment11.params=x\ y\ isHot
+comment11.target=void\ setHotTile(int,\ int,\ boolean)
+comment2.params=
+comment2.target=void\ initializeEmptyBoard()
+comment3.params=x\ y
+comment3.target=boolean\ isValidPosition(int,\ int)
+comment4.params=x\ y
+comment4.target=domain.shared.EntityType\ getEntityAt(int,\ int)
+comment5.params=x\ y
+comment5.target=boolean\ isWalkable(int,\ int)
+comment6.params=
+comment6.target=int\ getWidth()
+comment7.params=
+comment7.target=int\ getHeight()
+comment8.params=x\ y
+comment8.target=boolean\ createIceBlock(int,\ int)
+comment9.params=x\ y
+comment9.target=boolean\ breakIceBlock(int,\ int)
+numComments=12

@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Direction
+comment1.params=dx\ dy
+comment1.target=Direction(int,\ int)
+comment2.params=
+comment2.target=int\ getDx()
+comment3.params=
+comment3.target=int\ getDy()
+comment4.params=
+comment4.target=Direction\ opposite()
+numComments=5
