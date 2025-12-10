@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.target=Player
+comment0.text=\r\n\ Representa\ un\ jugador\ en\ el\ juego\r\n\ SRP\:\ Solo\ maneja\ el\ estado\ del\ jugador\ (personaje,\ posici\u00F3n,\ puntuaci\u00F3n)\r\n
+comment1.params=character\ startPosition\ isMachine
+comment1.target=Player(java.lang.String,\ Position,\ boolean)
+comment2.params=
+comment2.target=java.lang.String\ getCharacter()
+comment3.params=
+comment3.target=Position\ getPosition()
+comment4.params=position
+comment4.target=void\ setPosition(Position)
+comment5.params=
+comment5.target=boolean\ isMachine()
+comment6.params=
+comment6.target=int\ getScore()
+comment7.params=points
+comment7.target=void\ addScore(int)
+numComments=8

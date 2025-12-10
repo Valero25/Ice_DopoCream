@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=Portada
+comment1.params=size\ onClick
+comment1.target=Portada(java.awt.Dimension,\ java.lang.Runnable)
+comment2.params=e
+comment2.target=void\ mouseClicked(java.awt.event.MouseEvent)
+numComments=3
