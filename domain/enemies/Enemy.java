@@ -3,6 +3,7 @@ package domain.enemies;
 import domain.shared.Direction;
 
 public abstract class Enemy implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     protected String id;
     protected int x;
     protected int y;

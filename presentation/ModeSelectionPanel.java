@@ -27,13 +27,13 @@ public class ModeSelectionPanel extends JPanel {
 
         // Efecto hover
         // Efecto hover
-        back.addMouseListener(new ColorHoverListener(
+        back.addMouseListener(StandardMouseListener.onHoverFg(
                 back,
                 Color.ORANGE,
-                Color.YELLOW,
-                true,
-                new Font("Monospaced", Font.BOLD, 20),
-                new Font("Monospaced", Font.BOLD, 22)));
+                Color.YELLOW)
+                .withFontEffect(
+                        new Font("Monospaced", Font.BOLD, 20),
+                        new Font("Monospaced", Font.BOLD, 22)));
 
         back.addActionListener(e -> onBack.run());
         add(back);
@@ -58,7 +58,8 @@ public class ModeSelectionPanel extends JPanel {
 
                     // Efecto hover: Agregar un listener que cambie el borde
                     // Efecto hover: Agregar un listener que cambie el borde
-                    btn.addMouseListener(new BorderHoverListener(btn, Color.YELLOW, 3));
+                    btn.addMouseListener(StandardMouseListener.onHoverBg(btn, null, null) // Dummy for starting
+                            .withBorderEffect(Color.YELLOW, 3));
                 } else {
                     // Fallback: botón con texto y efectos
                     btn = createTextButton(modeKey);
@@ -88,11 +89,10 @@ public class ModeSelectionPanel extends JPanel {
 
         // Efecto hover: cambiar color de fondo
         // Efecto hover: cambiar color de fondo
-        btn.addMouseListener(new ColorHoverListener(
+        btn.addMouseListener(StandardMouseListener.onHoverBg(
                 btn,
                 new Color(101, 67, 33),
-                new Color(150, 100, 50),
-                false));
+                new Color(150, 100, 50)));
 
         return btn;
     }

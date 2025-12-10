@@ -13,6 +13,7 @@ import domain.shared.BadOpoException;
 import domain.shared.Direction;
 import domain.shared.EntityInfo;
 import domain.shared.GameStatus;
+import domain.shared.BadOpoLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,8 +113,15 @@ public class DomainController implements java.io.Serializable {
     /**
      * Establece el nivel actual para el sistema de oleadas
      */
+    /**
+     * Establece el nivel actual para el sistema de oleadas
+     */
     public void setCurrentLevel(String level) {
         this.currentLevel = level;
+    }
+
+    public String getCurrentLevel() {
+        return currentLevel;
     }
 
     /**
@@ -125,7 +133,7 @@ public class DomainController implements java.io.Serializable {
         try {
             this.p1Flavor = IceCreamFlavor.valueOf(flavorName.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
-            System.err.println("Sabor inválido P1: " + flavorName + ". Usando VANILLA.");
+            BadOpoLogger.logError("Sabor inválido P1: " + flavorName + ". Usando VANILLA.", e);
             this.p1Flavor = IceCreamFlavor.VANILLA;
         }
     }
@@ -148,6 +156,7 @@ public class DomainController implements java.io.Serializable {
         try {
             this.p1Difficulty = PlayerType.valueOf(type);
         } catch (Exception e) {
+            BadOpoLogger.logError("Error setting player 1 difficulty: " + type, e);
             this.p1Difficulty = PlayerType.MACHINE_HUNGRY;
         }
     }
@@ -156,6 +165,7 @@ public class DomainController implements java.io.Serializable {
         try {
             this.p2Difficulty = PlayerType.valueOf(type);
         } catch (Exception e) {
+            BadOpoLogger.logError("Error setting player 2 difficulty: " + type, e);
             this.p2Difficulty = PlayerType.MACHINE_HUNGRY;
         }
     }
@@ -407,6 +417,10 @@ public class DomainController implements java.io.Serializable {
         allObjects.addAll(enemyCtrl.getEnemyInfo());
 
         return allObjects;
+    }
+
+    public java.util.Map<String, Integer> getRemainingFruits() {
+        return itemCtrl.getRemainingFruitsByType();
     }
 
     public boolean isWall(int x, int y) {

@@ -34,13 +34,13 @@ public class HomePanel extends JPanel {
 
         // Efectos hover: cambiar color del texto
         // Efectos hover: cambiar color del texto y tamaño
-        btn.addMouseListener(new ColorHoverListener(
+        btn.addMouseListener(StandardMouseListener.onHoverFg(
                 btn,
                 new Color(101, 67, 33),
-                new Color(255, 140, 0),
-                true,
-                new Font("Monospaced", Font.BOLD, 24),
-                new Font("Monospaced", Font.BOLD, 26)));
+                new Color(255, 140, 0))
+                .withFontEffect(
+                        new Font("Monospaced", Font.BOLD, 24),
+                        new Font("Monospaced", Font.BOLD, 26)));
 
         btn.addActionListener(e -> action.run());
         return btn;

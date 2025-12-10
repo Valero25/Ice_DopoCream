@@ -35,7 +35,7 @@ public class LevelSelectionPanel extends JPanel {
 
         // Efecto hover
         // Efecto hover - Color normal: (50,50,50)/ORANGE, Hover: (80,80,80)/YELLOW
-        back.addMouseListener(new BackButtonHoverListener(
+        back.addMouseListener(StandardMouseListener.onHoverColor(
                 back,
                 new Color(50, 50, 50), new Color(80, 80, 80),
                 Color.ORANGE, Color.YELLOW));

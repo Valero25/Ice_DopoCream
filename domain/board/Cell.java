@@ -2,7 +2,10 @@ package domain.board;
 
 import domain.shared.EntityType;
 
-class Cell {
+import java.io.Serializable;
+
+class Cell implements Serializable {
+    private static final long serialVersionUID = 1L;
     private EntityType content; // WALL, ICE_BLOCK, EMPTY
     private float animationProgress; // 0.0 a 1.0 para efecto dominó
     private boolean isAnimating;

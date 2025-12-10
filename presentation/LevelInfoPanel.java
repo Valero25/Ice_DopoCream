@@ -23,7 +23,7 @@ public class LevelInfoPanel extends JPanel {
 
         // Panel principal con información - temática invernal
         // Panel principal con información - temática invernal
-        InfoBackgroundPanel infoPanel = new InfoBackgroundPanel();
+        StandardBackgroundPanel infoPanel = new StandardBackgroundPanel(StandardBackgroundPanel.Style.WINTER);
 
         // Título del nivel con efecto de nieve
         JLabel titleLabel = new JLabel("⭐ " + getLevelTitle(levelName) + " ⭐");

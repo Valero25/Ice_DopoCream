@@ -182,6 +182,16 @@ public class ItemController implements java.io.Serializable {
         return count;
     }
 
+    public java.util.Map<String, Integer> getRemainingFruitsByType() {
+        java.util.Map<String, Integer> counts = new java.util.HashMap<>();
+        for (Item item : items) {
+            if (item.isFruit()) {
+                counts.put(item.getType(), counts.getOrDefault(item.getType(), 0) + 1);
+            }
+        }
+        return counts;
+    }
+
     // Método para colisión con retorno de puntos (Si no lo tenías actualizado)
     public int collectItemAt(int x, int y) {
         Iterator<Item> it = items.iterator();

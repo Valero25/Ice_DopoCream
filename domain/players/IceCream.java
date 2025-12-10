@@ -8,6 +8,7 @@ import domain.shared.Direction;
  * Contiene la posicion, puntuacion, estado de vida y apariencia del personaje.
  */
 public class IceCream implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private int x;

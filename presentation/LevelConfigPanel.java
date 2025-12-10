@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LevelConfigPanel extends JPanel {
+public class LevelConfigPanel extends StandardBackgroundPanel {
 
     private LevelConfiguration config;
     private String levelName;
@@ -24,10 +24,15 @@ public class LevelConfigPanel extends JPanel {
     private Map<String, JCheckBox> obstacleCheckboxes;
 
     public LevelConfigPanel(String levelName,
+            domain.level.LevelConfiguration existingConfig,
             java.util.function.Consumer<LevelConfiguration> onContinue,
             Runnable onBack) {
+        super(StandardBackgroundPanel.Style.WINTER);
         this.levelName = levelName;
-        this.config = new LevelConfiguration();
+        // Si nos pasan config existente, la usamos (clonada o directa).
+        // Si no, creamos nueva.
+        this.config = (existingConfig != null) ? existingConfig : new LevelConfiguration();
+
         this.fruitSpinners = new HashMap<>();
         this.fruitCheckboxes = new HashMap<>();
         this.enemySpinners = new HashMap<>();
@@ -36,12 +41,12 @@ public class LevelConfigPanel extends JPanel {
         this.obstacleCheckboxes = new HashMap<>();
 
         setLayout(new BorderLayout());
-        setBackground(new Color(135, 206, 250)); // Celeste
+        // setBackground(new Color(135, 206, 250)); // REMOVED
 
         // Panel principal con scroll
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(new Color(135, 206, 250));
+        contentPanel.setOpaque(false); // Transparente para ver la nieve
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
         // Título
@@ -76,12 +81,14 @@ public class LevelConfigPanel extends JPanel {
         // Scroll pane
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setBorder(null);
+        scrollPane.getViewport().setOpaque(false); // Importante para ver el fondo
+        scrollPane.setOpaque(false);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         add(scrollPane, BorderLayout.CENTER);
 
         // Panel de botones
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
-        buttonPanel.setBackground(new Color(135, 206, 250));
+        buttonPanel.setOpaque(false);
 
         JButton backButton = createStyledButton("VOLVER", new Color(200, 100, 100));
         backButton.addActionListener(e -> onBack.run());
@@ -100,15 +107,22 @@ public class LevelConfigPanel extends JPanel {
     private JPanel createSectionPanel(String title, JPanel content) {
         JPanel section = new JPanel();
         section.setLayout(new BorderLayout());
-        section.setBackground(Color.WHITE);
+
+        // Fondo semi-transparente blanco/azulado para que se lea bien sobre la nieve
+        section.setBackground(new Color(255, 255, 255, 200));
+
         section.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(100, 150, 200), 2),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)));
-        section.setMaximumSize(new Dimension(800, 400));
 
-        JLabel titleLabel = new JLabel("☐ " + title);
+        // Centrar el panel en el BoxLayout padre
+        section.setAlignmentX(Component.CENTER_ALIGNMENT);
+        section.setMaximumSize(new Dimension(600, 400)); // Un poco más estrecho para centrar mejor
+
+        JLabel titleLabel = new JLabel("☐ " + title, SwingConstants.CENTER); // Centrar texto
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(new Color(0, 51, 102));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER); // Asegurar centrado horizontal
         section.add(titleLabel, BorderLayout.NORTH);
 
         section.add(content, BorderLayout.CENTER);
@@ -117,72 +131,105 @@ public class LevelConfigPanel extends JPanel {
     }
 
     private JPanel createFruitsPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        addConfigRow(panel, "Plátano", "BANANA", 5, fruitCheckboxes, fruitSpinners);
-        addConfigRow(panel, "Uva", "GRAPE", 5, fruitCheckboxes, fruitSpinners);
-        addConfigRow(panel, "Piña", "PINEAPPLE", 3, fruitCheckboxes, fruitSpinners);
-        addConfigRow(panel, "Cereza", "CHERRY", 3, fruitCheckboxes, fruitSpinners);
-        addConfigRow(panel, "Cactus", "CACTUS", 2, fruitCheckboxes, fruitSpinners);
+        addConfigRow(panel, "Plátano", "BANANA", 5, fruitCheckboxes, fruitSpinners, 0);
+        addConfigRow(panel, "Uva", "GRAPE", 5, fruitCheckboxes, fruitSpinners, 1);
+        addConfigRow(panel, "Piña", "PINEAPPLE", 3, fruitCheckboxes, fruitSpinners, 2);
+        addConfigRow(panel, "Cereza", "CHERRY", 3, fruitCheckboxes, fruitSpinners, 3);
+        addConfigRow(panel, "Cactus", "CACTUS", 2, fruitCheckboxes, fruitSpinners, 4);
 
         return panel;
     }
 
     private JPanel createEnemiesPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        addConfigRow(panel, "Troll", "TROLL", 2, enemyCheckboxes, enemySpinners);
-        addConfigRow(panel, "Calamar", "SQUID", 1, enemyCheckboxes, enemySpinners);
-        addConfigRow(panel, "Maceta", "FLOWERPOT", 1, enemyCheckboxes, enemySpinners);
-        addConfigRow(panel, "Narval", "NARWHAL", 1, enemyCheckboxes, enemySpinners);
+        addConfigRow(panel, "Troll", "TROLL", 2, enemyCheckboxes, enemySpinners, 0);
+        addConfigRow(panel, "Calamar", "SQUID", 1, enemyCheckboxes, enemySpinners, 1);
+        addConfigRow(panel, "Maceta", "FLOWERPOT", 1, enemyCheckboxes, enemySpinners, 2);
+        addConfigRow(panel, "Narval", "NARWHAL", 1, enemyCheckboxes, enemySpinners, 3);
 
         return panel;
     }
 
     private JPanel createObstaclesPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        addConfigRow(panel, "Fogata", "CAMPFIRE", 2, obstacleCheckboxes, obstacleSpinners);
-        addConfigRow(panel, "Baldosa Caliente", "HOT_TILE", 4, obstacleCheckboxes, obstacleSpinners);
+        addConfigRow(panel, "Fogata", "CAMPFIRE", 2, obstacleCheckboxes, obstacleSpinners, 0);
+        addConfigRow(panel, "Baldosa Caliente", "HOT_TILE", 4, obstacleCheckboxes, obstacleSpinners, 1);
 
         return panel;
     }
 
     private void addConfigRow(JPanel parent, String displayName, String configKey,
             int defaultValue, Map<String, JCheckBox> checkboxMap,
-            Map<String, JSpinner> spinnerMap) {
-        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        row.setBackground(Color.WHITE);
-        row.setMaximumSize(new Dimension(700, 50));
+            Map<String, JSpinner> spinnerMap, int gridy) {
 
-        // Checkbox
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = gridy;
+        gbc.insets = new Insets(5, 5, 5, 5); // Espaciado
+        gbc.fill = GridBagConstraints.VERTICAL;
+
+        // Initial value logic
+        int initialValue = defaultValue;
+        boolean isSelected = true;
+
+        if (config.getActiveFruitTypes().contains(configKey)) {
+            initialValue = config.getFruitCount(configKey);
+        } else if (config.getActiveEnemyTypes().contains(configKey)) {
+            initialValue = config.getEnemyCount(configKey);
+        } else if (config.getAllObstacles().containsKey(configKey) && config.getObstacleCount(configKey) > 0) {
+            initialValue = config.getObstacleCount(configKey);
+        } else {
+            if (!isConfigEmpty(config)) {
+                initialValue = 0;
+                isSelected = false;
+            }
+        }
+
+        // 1. Checkbox (Columna 0)
         JCheckBox checkbox = new JCheckBox(displayName);
-        checkbox.setSelected(true);
-        checkbox.setFont(new Font("Arial", Font.PLAIN, 16));
-        checkbox.setBackground(Color.WHITE);
-        checkbox.setPreferredSize(new Dimension(200, 30));
+        checkbox.setSelected(isSelected || initialValue > 0);
+        checkbox.setFont(new Font("Arial", Font.PLAIN, 18));
+        checkbox.setOpaque(false);
+        // checkbox.setPreferredSize(new Dimension(150, 30)); // No necesario con
+        // GridBag, pero ayuda
         checkboxMap.put(configKey, checkbox);
 
-        // Spinner con el valor por defecto
-        SpinnerNumberModel model = new SpinnerNumberModel(defaultValue, 0, 20, 1);
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST; // Alineado a la izquierda
+        gbc.weightx = 0; // No estirar
+        parent.add(checkbox, gbc);
+
+        // 2. Spinner (Columna 1)
+        SpinnerNumberModel model = new SpinnerNumberModel(initialValue, 0, 20, 1);
         JSpinner spinner = new JSpinner(model);
-        spinner.setFont(new Font("Arial", Font.PLAIN, 14));
-        spinner.setPreferredSize(new Dimension(80, 30));
+        spinner.setFont(new Font("Arial", Font.PLAIN, 16));
+        spinner.setPreferredSize(new Dimension(60, 30));
         spinnerMap.put(configKey, spinner);
 
-        // Botones + y -
-        JButton minusBtn = createSmallButton("-");
-        JButton plusBtn = createSmallButton("+");
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        parent.add(spinner, gbc);
 
+        // 3. Botón Menos (Columna 2)
+        JButton minusBtn = createSmallButton("-");
+        gbc.gridx = 2;
+        parent.add(minusBtn, gbc);
+
+        // 4. Botón Mas (Columna 3)
+        JButton plusBtn = createSmallButton("+");
+        gbc.gridx = 3;
+        parent.add(plusBtn, gbc);
+
+        // Logica de botones
         minusBtn.addActionListener(e -> {
             int val = (Integer) spinner.getValue();
             if (val > 0)
@@ -195,7 +242,6 @@ public class LevelConfigPanel extends JPanel {
                 spinner.setValue(val + 1);
         });
 
-        // Cuando se desmarca el checkbox, poner el spinner en 0
         checkbox.addActionListener(e -> {
             if (!checkbox.isSelected()) {
                 spinner.setValue(0);
@@ -203,13 +249,6 @@ public class LevelConfigPanel extends JPanel {
                 spinner.setValue(defaultValue);
             }
         });
-
-        row.add(checkbox);
-        row.add(spinner);
-        row.add(minusBtn);
-        row.add(plusBtn);
-
-        parent.add(row);
     }
 
     private JButton createSmallButton(String text) {
@@ -232,11 +271,10 @@ public class LevelConfigPanel extends JPanel {
         btn.setBorder(BorderFactory.createLineBorder(bgColor.darker(), 2));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btn.addMouseListener(new ColorHoverListener(
+        btn.addMouseListener(StandardMouseListener.onHoverBg(
                 btn,
                 bgColor,
-                bgColor.brighter(),
-                false));
+                bgColor.brighter()));
 
         return btn;
     }
@@ -261,8 +299,10 @@ public class LevelConfigPanel extends JPanel {
         }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    private boolean isConfigEmpty(domain.level.LevelConfiguration c) {
+        return c.getActiveFruitTypes().isEmpty() &&
+                c.getActiveEnemyTypes().isEmpty() &&
+                c.getAllObstacles().isEmpty();
     }
+
 }

@@ -10,7 +10,7 @@ public class SplashPanel extends JPanel {
         setBackground(Color.BLACK);
 
         // Mouse click avanza al siguiente menú
-        addMouseListener(new SplashMouseListener(onClick));
+        addMouseListener(StandardMouseListener.onClick(this, onClick));
 
         // Intentamos cargar la imagen
         splashImage = loader.getBackgroundImage("SPLASH");

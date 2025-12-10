@@ -3,6 +3,7 @@ package domain.board;
 import domain.shared.EntityType;
 
 public class AnimationEntry implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     int x, y;
     EntityType targetType; // EMPTY (destruir) o ICE_BLOCK (crear)
     float delay;

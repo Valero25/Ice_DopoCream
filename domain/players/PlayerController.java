@@ -7,6 +7,7 @@ import domain.shared.ActionType;
 import domain.shared.BadOpoException;
 import domain.shared.Direction;
 import domain.shared.EntityInfo;
+import domain.shared.BadOpoLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -121,7 +122,8 @@ public class PlayerController implements java.io.Serializable {
                 try {
                     performAction(p.getId(), action, dir);
                 } catch (BadOpoException e) {
-                    // Ignorar si la accion falla
+                    // Ignorar si la accion falla, pero loguear como advertencia
+                    BadOpoLogger.log("Bot action failed: " + e.getMessage());
                 }
             }
             p.resetBotTimer();

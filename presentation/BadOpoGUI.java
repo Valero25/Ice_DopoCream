@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import domain.shared.BadOpoLogger;
+
 public class BadOpoGUI extends JFrame {
 
     private DomainController domain;
@@ -110,9 +112,13 @@ public class BadOpoGUI extends JFrame {
     }
 
     private void showLevelConfig(String levelFile) {
+        // Recuperar conf existente o null/default
+        domain.level.LevelConfiguration existing = getConfigurationForLevel(levelFile);
+
         // Mostrar panel de configuración personalizada
         LevelConfigPanel configPanel = new LevelConfigPanel(
                 levelFile,
+                existing,
                 config -> showLevelInfo(levelFile, config),
                 () -> showLevelSelection());
         mainPanel.add(configPanel, "LEVEL_CONFIG");
@@ -206,6 +212,7 @@ public class BadOpoGUI extends JFrame {
             gameLoopTimer.start();
 
         } catch (BadOpoException e) {
+            BadOpoLogger.logError("Error al iniciar el juego", e);
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }
@@ -241,7 +248,8 @@ public class BadOpoGUI extends JFrame {
                 domain.getPlayer2Info(),
                 domain.getScoreP1(),
                 domain.getScoreP2(),
-                domain.getTimeRemaining());
+                domain.getTimeRemaining(),
+                domain.getRemainingFruits());
     }
 
     private void showGameOverScreen(GameStatus status) {
@@ -339,67 +347,34 @@ public class BadOpoGUI extends JFrame {
      * Si no existe configuración para ese nivel, usa la última configuración
      * disponible.
      */
+    /**
+     * Obtiene la configuración para un nivel específico.
+     * Si no existe configuración para ese nivel, devuelve null o una nueva
+     * configuracion
+     * (NO hereda del nivel anterior para evitar bugs de reinicio con config
+     * incorrecta).
+     */
     private domain.level.LevelConfiguration getConfigurationForLevel(String level) {
         // Si hay configuración específica para este nivel, usarla
         if (levelConfigurations.containsKey(level)) {
             return levelConfigurations.get(level);
         }
 
-        // Si no hay, buscar la última configuración disponible (del nivel anterior)
-        String previousLevel = getPreviousLevel(level);
-        if (previousLevel != null && levelConfigurations.containsKey(previousLevel)) {
-            // Clonar la configuración del nivel anterior para este nivel
-            domain.level.LevelConfiguration clonedConfig = cloneConfiguration(levelConfigurations.get(previousLevel));
-            levelConfigurations.put(level, clonedConfig);
-            return clonedConfig;
-        }
+        /*
+         * LÓGICA ANTERIOR ELIMINADA:
+         * No queremos heredar configuración del nivel anterior automáticamente al
+         * configurar,
+         * porque eso causaba que si morías en Nivel 2 y reiniciabas Nivel 1,
+         * el sistema podía confundirse. Mejor, cada nivel empieza limpio si no se ha
+         * configurado.
+         */
 
-        // Si no hay ninguna configuración, usar la actual o crear una nueva por defecto
-        if (currentLevelConfig != null) {
-            levelConfigurations.put(level, currentLevelConfig);
-            return currentLevelConfig;
-        }
-
-        // Fallback: crear configuración por defecto
+        // Fallback: crear configuración por defecto y guardarla
         domain.level.LevelConfiguration defaultConfig = new domain.level.LevelConfiguration();
+        // Opcional: Podríamos pre-cargar defaults aquí si quisiéramos
+
         levelConfigurations.put(level, defaultConfig);
         return defaultConfig;
-    }
-
-    /**
-     * Obtiene el nivel anterior al dado.
-     */
-    private String getPreviousLevel(String level) {
-        if ("LEVEL_2".equals(level))
-            return "LEVEL_1";
-        if ("LEVEL_3".equals(level))
-            return "LEVEL_2";
-        // Extensible: agregar más niveles aquí
-        return null;
-    }
-
-    /**
-     * Clona una configuración de nivel para crear una copia independiente.
-     */
-    private domain.level.LevelConfiguration cloneConfiguration(domain.level.LevelConfiguration original) {
-        domain.level.LevelConfiguration clone = new domain.level.LevelConfiguration();
-
-        // Copiar frutas
-        for (String fruitType : original.getActiveFruitTypes()) {
-            clone.setFruitCount(fruitType, original.getFruitCount(fruitType));
-        }
-
-        // Copiar enemigos
-        for (String enemyType : original.getActiveEnemyTypes()) {
-            clone.setEnemyCount(enemyType, original.getEnemyCount(enemyType));
-        }
-
-        // Copiar obstáculos
-        for (java.util.Map.Entry<String, Integer> entry : original.getAllObstacles().entrySet()) {
-            clone.setObstacleCount(entry.getKey(), entry.getValue());
-        }
-
-        return clone;
     }
 
     /**
@@ -577,6 +552,7 @@ public class BadOpoGUI extends JFrame {
                 domain.saveGame(fileToSave.getAbsolutePath());
                 JOptionPane.showMessageDialog(this, "Partida guardada correctamente.");
             } catch (BadOpoException e) {
+                BadOpoLogger.logError("Error al guardar la partida", e);
                 JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
             }
         }
@@ -602,6 +578,7 @@ public class BadOpoGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "Partida cargada correctamente.");
 
             } catch (BadOpoException e) {
+                BadOpoLogger.logError("Error al cargar la partida", e);
                 JOptionPane.showMessageDialog(this, "Error al cargar: " + e.getMessage());
             }
         }
@@ -621,13 +598,14 @@ public class BadOpoGUI extends JFrame {
         activeGamePanel.setupBoard(walls);
         activeGamePanel.setPlayerNames(domain.getPlayer1Name(), domain.getPlayer2Name());
 
-        // Cargar fondo (si se puede recuperar el nombre del nivel, sería ideal, sino
-        // usar default)
-        // Como currentLevel está serializado en DomainController, deberíamos poder
-        // acceder a él si lo hiciéramos público.
-        // Por ahora usaremos un fondo genérico o intentaremos deducirlo.
-        // TODO: Agregar getter para currentLevel en DomainController o guardar el nivel
-        // en el nombre del archivo.
+        // Cargar fondo usando el nivel guardado en el dominio
+        String levelFile = domain.getCurrentLevel();
+        if (levelFile != null) {
+            Image levelBg = loader.getBackgroundImage(levelFile);
+            if (levelBg != null) {
+                activeGamePanel.setLevelBackground(levelBg);
+            }
+        }
 
         // Mostrar Panel
         mainPanel.add(activeGamePanel, "GAME");

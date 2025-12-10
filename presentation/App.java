@@ -2,6 +2,7 @@ package presentation;
 
 import domain.game.DomainController;
 import javax.swing.SwingUtilities;
+import domain.shared.BadOpoLogger;
 
 public class App {
     public static void main(String[] args) {
@@ -18,8 +19,7 @@ public class App {
                 gui.setVisible(true);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Error fatal al iniciar la aplicación: " + e.getMessage());
+                BadOpoLogger.logError("Error fatal al iniciar la aplicación", e);
             }
         });
     }

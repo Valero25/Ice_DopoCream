@@ -90,14 +90,17 @@ public class GamePanel extends JPanel {
      * @param scoreP2       Puntuacion del jugador 2
      * @param timeRemaining Tiempo restante en segundos
      */
+    private java.util.Map<String, Integer> remainingFruits;
+
     public void renderFrame(List<EntityInfo> entities, EntityInfo player1, EntityInfo player2,
-            int scoreP1, int scoreP2, float timeRemaining) {
+            int scoreP1, int scoreP2, float timeRemaining, java.util.Map<String, Integer> remainingFruits) {
         this.entities = entities;
         this.player1 = player1;
         this.player2 = player2;
         this.scoreP1 = scoreP1;
         this.scoreP2 = scoreP2;
         this.timeRemaining = timeRemaining;
+        this.remainingFruits = remainingFruits;
         repaint();
     }
 
@@ -248,7 +251,7 @@ public class GamePanel extends JPanel {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Monospaced", Font.BOLD, 22));
         g.setColor(Color.GREEN);
-        g.drawString("TIEMPO: " + (int) timeRemaining, 20, 28);
+        g.drawString("TIEMPO: " + (int) timeRemaining, 80, 28); // Movido para dejar espacio al pause
 
         g.setColor(Color.YELLOW);
         String s1 = player1Name + ": " + scoreP1;
@@ -257,5 +260,38 @@ public class GamePanel extends JPanel {
         g.setColor(Color.CYAN);
         String s2 = player2Name + ": " + scoreP2;
         g.drawString(s2, getWidth() / 2 + 50, 28);
+
+        // --- FRUIT COUNTER HUD (Debajo del botón de pausa) ---
+        if (remainingFruits != null && !remainingFruits.isEmpty()) {
+            int startX = 10;
+            int startY = 100;
+            int iconSize = 30;
+            int gap = 10;
+            int i = 0;
+
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.setColor(new Color(0, 0, 0, 100));
+            // Fondo semitransparente para los contadores
+            g.fillRoundRect(startX - 5, startY - 5, 80, remainingFruits.size() * (iconSize + gap) + 10, 10, 10);
+
+            for (java.util.Map.Entry<String, Integer> entry : remainingFruits.entrySet()) {
+                String fruitType = entry.getKey();
+                int count = entry.getValue();
+
+                if (count > 0) {
+                    // Dibujar icono
+                    Image img = loader.getImage(fruitType, iconSize, iconSize);
+                    if (img != null) {
+                        g.drawImage(img, startX, startY + i * (iconSize + gap), this);
+                    }
+
+                    // Dibujar número
+                    g.setColor(Color.WHITE);
+                    g.drawString("x" + count, startX + iconSize + 5, startY + i * (iconSize + gap) + 20);
+
+                    i++;
+                }
+            }
+        }
     }
 }

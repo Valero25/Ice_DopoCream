@@ -1,6 +1,7 @@
 package domain.shared;
 
 public class EntityInfo implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     // Datos inmutables o simples para que la vista dibuje
     public final String id;
     public final int x;

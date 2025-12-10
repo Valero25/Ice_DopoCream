@@ -3,6 +3,7 @@ package domain.items;
 import domain.board.BoardController;
 
 public abstract class Item implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     protected String id;
     protected int x;
     protected int y;

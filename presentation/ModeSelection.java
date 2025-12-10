@@ -10,7 +10,7 @@ public class ModeSelection extends JFrame {
     private Font pixelFont;
 
     public ModeSelection(Dimension size, Runnable onBack,
-                         Runnable onPvsP, Runnable onPvsM, Runnable onMvsM) {
+            Runnable onPvsP, Runnable onPvsM, Runnable onMvsM) {
 
         setTitle("Game Mode - Bad Dopo Cream");
         setSize(size);
@@ -56,10 +56,22 @@ public class ModeSelection extends JFrame {
         back.setBounds(20, size.height - 120, 180, 50);
         background.add(back);
 
-        btnPvsP.addActionListener(e -> { dispose(); onPvsP.run(); });
-        btnPvsM.addActionListener(e -> { dispose(); onPvsM.run(); });
-        btnMvsM.addActionListener(e -> { dispose(); onMvsM.run(); });
-        back.addActionListener(e -> { dispose(); onBack.run(); });
+        btnPvsP.addActionListener(e -> {
+            dispose();
+            onPvsP.run();
+        });
+        btnPvsM.addActionListener(e -> {
+            dispose();
+            onPvsM.run();
+        });
+        btnMvsM.addActionListener(e -> {
+            dispose();
+            onMvsM.run();
+        });
+        back.addActionListener(e -> {
+            dispose();
+            onBack.run();
+        });
 
         setVisible(true);
     }
@@ -94,12 +106,14 @@ public class ModeSelection extends JFrame {
         b.add(lbl);
 
         b.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) {
+            @Override
+            public void mouseEntered(MouseEvent e) {
                 b.setIcon(animated);
                 lbl.setForeground(new Color(212, 166, 53));
             }
 
-            @Override public void mouseExited(MouseEvent e) {
+            @Override
+            public void mouseExited(MouseEvent e) {
                 b.setIcon(idle);
                 lbl.setForeground(new Color(92, 59, 30));
             }
@@ -118,10 +132,13 @@ public class ModeSelection extends JFrame {
         b.setFocusPainted(false);
 
         b.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) {
+            @Override
+            public void mouseEntered(MouseEvent e) {
                 b.setForeground(new Color(255, 210, 80));
             }
-            @Override public void mouseExited(MouseEvent e) {
+
+            @Override
+            public void mouseExited(MouseEvent e) {
                 b.setForeground(new Color(212, 166, 53));
             }
         });

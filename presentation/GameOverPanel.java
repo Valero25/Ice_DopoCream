@@ -13,7 +13,7 @@ public class GameOverPanel extends JPanel {
 
         // Panel central
         // Panel central
-        ResultBackgroundPanel resultPanel = new ResultBackgroundPanel();
+        StandardBackgroundPanel resultPanel = new StandardBackgroundPanel(StandardBackgroundPanel.Style.RESULT);
 
         // Título según resultado
         JLabel titleLabel = new JLabel();
@@ -119,11 +119,10 @@ public class GameOverPanel extends JPanel {
 
         // Efecto hover
         // Efecto hover
-        btn.addMouseListener(new ColorHoverListener(
+        btn.addMouseListener(StandardMouseListener.onHoverBg(
                 btn,
                 new Color(50, 100, 150),
-                new Color(80, 150, 200),
-                false));
+                new Color(80, 150, 200)));
 
         return btn;
     }

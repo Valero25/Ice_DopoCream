@@ -11,7 +11,7 @@ public class PauseOverlay extends JPanel {
 
         // Panel central con fondo semi-transparente
         // Panel central con fondo semi-transparente
-        PausePanelBackground pausePanel = new PausePanelBackground();
+        StandardBackgroundPanel pausePanel = new StandardBackgroundPanel(StandardBackgroundPanel.Style.DARK_OVERLAY);
 
         // Título PAUSA
         JLabel titleLabel = new JLabel("PAUSA");
@@ -55,7 +55,10 @@ public class PauseOverlay extends JPanel {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Efecto hover
-        btn.addMouseListener(new PauseButtonHoverListener(btn));
+        btn.addMouseListener(StandardMouseListener.onHoverBg(
+                btn,
+                new Color(50, 50, 50),
+                new Color(100, 100, 100)));
 
         return btn;
     }

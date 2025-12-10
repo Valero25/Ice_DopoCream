@@ -1,6 +1,9 @@
 package domain.board;
 
-class Position {
+import java.io.Serializable;
+
+class Position implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int x;
     private int y;
 
@@ -9,13 +12,20 @@ class Position {
         this.y = y;
     }
 
-    int getX() { return x; }
-    int getY() { return y; }
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         Position position = (Position) obj;
         return x == position.x && y == position.y;
     }
