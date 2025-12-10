@@ -28,8 +28,9 @@ public class BadOpoGUI extends JFrame {
     private GamePanel activeGamePanel; // Referencia al panel actual
     private String currentLevel; // Nivel actual para siguiente nivel
     private domain.level.LevelConfiguration currentLevelConfig; // Configuración del nivel actual
-    
-    // Mapa de configuraciones por nivel (para mantener configuraciones al avanzar/retroceder)
+
+    // Mapa de configuraciones por nivel (para mantener configuraciones al
+    // avanzar/retroceder)
     private Map<String, domain.level.LevelConfiguration> levelConfigurations;
 
     public BadOpoGUI(DomainController domain) {
@@ -78,25 +79,26 @@ public class BadOpoGUI extends JFrame {
     }
 
     private void showCharSelection(String mode) {
-        CharacterSelectionPanel p = new CharacterSelectionPanel(loader, mode, (p1Flavor, p1Diff, p2Flavor, p2Diff, p1Name, p2Name) -> {
-            domain.setPlayer1Flavor(p1Flavor);
-            domain.setPlayer1Name(p1Name != null ? p1Name : "Player 1");
-            
-            if (p1Diff != null) {
-                domain.setPlayer1Difficulty(p1Diff);
-            }
+        CharacterSelectionPanel p = new CharacterSelectionPanel(loader, mode,
+                (p1Flavor, p1Diff, p2Flavor, p2Diff, p1Name, p2Name) -> {
+                    domain.setPlayer1Flavor(p1Flavor);
+                    domain.setPlayer1Name(p1Name != null ? p1Name : "Player 1");
 
-            // En modo SINGLE, p2Flavor puede ser null
-            if (p2Flavor != null) {
-                domain.setPlayer2Flavor(p2Flavor);
-                domain.setPlayer2Name(p2Name != null ? p2Name : "Player 2");
-            }
-            if (p2Diff != null) {
-                domain.setPlayer2Difficulty(p2Diff);
-            }
+                    if (p1Diff != null) {
+                        domain.setPlayer1Difficulty(p1Diff);
+                    }
 
-            showLevelSelection();
-        });
+                    // En modo SINGLE, p2Flavor puede ser null
+                    if (p2Flavor != null) {
+                        domain.setPlayer2Flavor(p2Flavor);
+                        domain.setPlayer2Name(p2Name != null ? p2Name : "Player 2");
+                    }
+                    if (p2Diff != null) {
+                        domain.setPlayer2Difficulty(p2Diff);
+                    }
+
+                    showLevelSelection();
+                });
         // Truco para refrescar el panel
         mainPanel.add(p, "CHAR");
         cardLayout.show(mainPanel, "CHAR");
@@ -108,14 +110,13 @@ public class BadOpoGUI extends JFrame {
         mainPanel.add(p, "LEVEL");
         cardLayout.show(mainPanel, "LEVEL");
     }
-    
+
     private void showLevelConfig(String levelFile) {
         // Mostrar panel de configuración personalizada
         LevelConfigPanel configPanel = new LevelConfigPanel(
-            levelFile,
-            config -> showLevelInfo(levelFile, config),
-            () -> showLevelSelection()
-        );
+                levelFile,
+                config -> showLevelInfo(levelFile, config),
+                () -> showLevelSelection());
         mainPanel.add(configPanel, "LEVEL_CONFIG");
         cardLayout.show(mainPanel, "LEVEL_CONFIG");
     }
@@ -123,16 +124,16 @@ public class BadOpoGUI extends JFrame {
     private void showLevelInfo(String levelFile, domain.level.LevelConfiguration config) {
         // Guardar la configuración para poder reiniciar o retroceder niveles
         this.currentLevelConfig = config;
-        
+
         // Guardar la configuración por nivel para reutilizarla después
         levelConfigurations.put(levelFile, config);
-        
+
         // Guardar la configuración en el dominio para usarla después
         domain.setLevelConfiguration(config);
-        
+
         // Crear panel de información basado en la configuración personalizada
         LevelInfoPanel infoPanel = new LevelInfoPanel(e -> startGame(levelFile));
-        
+
         // Convertir configuración a arrays para mostrar
         java.util.List<String> fruitTypes = config.getActiveFruitTypes();
         String[] fruits = fruitTypes.toArray(new String[0]);
@@ -140,14 +141,14 @@ public class BadOpoGUI extends JFrame {
         for (int i = 0; i < fruits.length; i++) {
             fruitCounts[i] = config.getFruitCount(fruits[i]);
         }
-        
+
         java.util.List<String> enemyTypes = config.getActiveEnemyTypes();
         String[] enemies = enemyTypes.toArray(new String[0]);
         int[] enemyCounts = new int[enemies.length];
         for (int i = 0; i < enemies.length; i++) {
             enemyCounts[i] = config.getEnemyCount(enemies[i]);
         }
-        
+
         // Obtener obstáculos configurados
         java.util.Map<String, Integer> obstacleMap = config.getAllObstacles();
         java.util.List<String> obstacleList = new java.util.ArrayList<>();
@@ -163,7 +164,7 @@ public class BadOpoGUI extends JFrame {
         for (int i = 0; i < obstacleCountList.size(); i++) {
             obstacleCounts[i] = obstacleCountList.get(i);
         }
-        
+
         infoPanel.setLevelInfo(levelFile, fruits, fruitCounts, enemies, enemyCounts, obstacles, obstacleCounts);
 
         mainPanel.add(infoPanel, "LEVEL_INFO");
@@ -334,17 +335,18 @@ public class BadOpoGUI extends JFrame {
         // Extensible: agregar más niveles aquí
         return null;
     }
-    
+
     /**
      * Obtiene la configuración para un nivel específico.
-     * Si no existe configuración para ese nivel, usa la última configuración disponible.
+     * Si no existe configuración para ese nivel, usa la última configuración
+     * disponible.
      */
     private domain.level.LevelConfiguration getConfigurationForLevel(String level) {
         // Si hay configuración específica para este nivel, usarla
         if (levelConfigurations.containsKey(level)) {
             return levelConfigurations.get(level);
         }
-        
+
         // Si no hay, buscar la última configuración disponible (del nivel anterior)
         String previousLevel = getPreviousLevel(level);
         if (previousLevel != null && levelConfigurations.containsKey(previousLevel)) {
@@ -353,19 +355,19 @@ public class BadOpoGUI extends JFrame {
             levelConfigurations.put(level, clonedConfig);
             return clonedConfig;
         }
-        
+
         // Si no hay ninguna configuración, usar la actual o crear una nueva por defecto
         if (currentLevelConfig != null) {
             levelConfigurations.put(level, currentLevelConfig);
             return currentLevelConfig;
         }
-        
+
         // Fallback: crear configuración por defecto
         domain.level.LevelConfiguration defaultConfig = new domain.level.LevelConfiguration();
         levelConfigurations.put(level, defaultConfig);
         return defaultConfig;
     }
-    
+
     /**
      * Obtiene el nivel anterior al dado.
      */
@@ -377,31 +379,31 @@ public class BadOpoGUI extends JFrame {
         // Extensible: agregar más niveles aquí
         return null;
     }
-    
+
     /**
      * Clona una configuración de nivel para crear una copia independiente.
      */
     private domain.level.LevelConfiguration cloneConfiguration(domain.level.LevelConfiguration original) {
         domain.level.LevelConfiguration clone = new domain.level.LevelConfiguration();
-        
+
         // Copiar frutas
         for (String fruitType : original.getActiveFruitTypes()) {
             clone.setFruitCount(fruitType, original.getFruitCount(fruitType));
         }
-        
+
         // Copiar enemigos
         for (String enemyType : original.getActiveEnemyTypes()) {
             clone.setEnemyCount(enemyType, original.getEnemyCount(enemyType));
         }
-        
+
         // Copiar obstáculos
         for (java.util.Map.Entry<String, Integer> entry : original.getAllObstacles().entrySet()) {
             clone.setObstacleCount(entry.getKey(), entry.getValue());
         }
-        
+
         return clone;
     }
-    
+
     /**
      * Reinicia desde el nivel 1 con todas las configuraciones guardadas.
      * Se usa cuando el jugador muere en modo SINGLE.
@@ -411,11 +413,11 @@ public class BadOpoGUI extends JFrame {
         domain.level.LevelConfiguration config = getConfigurationForLevel("LEVEL_1");
         this.currentLevelConfig = config;
         this.currentLevel = "LEVEL_1";
-        
+
         domain.setLevelConfiguration(config);
         startGame("LEVEL_1");
     }
-    
+
     /**
      * Avanza al siguiente nivel mostrando la pantalla de configuración.
      */
@@ -426,11 +428,11 @@ public class BadOpoGUI extends JFrame {
             showLevelSelection();
             return;
         }
-        
+
         // Mostrar la pantalla de configuración para el siguiente nivel
         showLevelConfig(nextLevel);
     }
-    
+
     /**
      * Reinicia el nivel actual con la misma configuración.
      * En modo SINGLE: Si se perdió, vuelve a LEVEL_1.
@@ -438,19 +440,18 @@ public class BadOpoGUI extends JFrame {
     private void restartCurrentLevel() {
         String gameMode = domain.getGameMode();
         GameStatus lastStatus = domain.getGameStatus();
-        
+
         // En modo SINGLE, si perdiste vuelves al nivel 1
-        if ("SINGLE".equals(gameMode) && 
-            (lastStatus == GameStatus.GAME_OVER || lastStatus == GameStatus.TIMEOUT)) {
+        if ("SINGLE".equals(gameMode) && lastStatus == GameStatus.GAME_OVER) {
             restartFromLevel1();
             return;
         }
-        
+
         // En otros modos o si ganaste, reinicia el mismo nivel
         if (currentLevelConfig == null) {
             currentLevelConfig = getConfigurationForLevel(currentLevel);
         }
-        
+
         domain.setLevelConfiguration(currentLevelConfig);
         startGame(currentLevel);
     }
