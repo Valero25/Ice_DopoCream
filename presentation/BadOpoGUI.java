@@ -1,7 +1,6 @@
 package presentation;
 
 import domain.game.DomainController;
-import domain.level.LevelInfo;
 import domain.shared.ActionType;
 import domain.shared.BadOpoException;
 import domain.shared.Direction;
@@ -9,8 +8,6 @@ import domain.shared.GameStatus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +60,7 @@ public class BadOpoGUI extends JFrame {
 
         mainPanel.add(new HomePanel(loader,
                 () -> cardLayout.show(mainPanel, "MODE"),
+                () -> loadGame(),
                 () -> System.exit(0)), "HOME");
 
         mainPanel.add(new ModeSelectionPanel(loader, mode -> {
@@ -531,6 +529,7 @@ public class BadOpoGUI extends JFrame {
                     domain.togglePause();
                     hidePauseOverlay();
                 },
+                () -> saveGame(),
                 () -> {
                     gameLoopTimer.stop();
                     hidePauseOverlay();
@@ -556,6 +555,92 @@ public class BadOpoGUI extends JFrame {
         activeGamePanel.revalidate();
         activeGamePanel.repaint();
         activeGamePanel.requestFocus();
+    }
+
+    // =============================================================
+    // PERSISTENCIA
+    // =============================================================
+
+    public void saveGame() {
+        if (domain.getStatus() != GameStatus.PAUSED && domain.getStatus() != GameStatus.PLAYING) {
+            JOptionPane.showMessageDialog(this, "Solo puedes guardar durante una partida.");
+            return;
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Partida");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            java.io.File fileToSave = fileChooser.getSelectedFile();
+            try {
+                domain.saveGame(fileToSave.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "Partida guardada correctamente.");
+            } catch (BadOpoException e) {
+                JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage());
+            }
+        }
+    }
+
+    public void loadGame() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Abrir Partida");
+        int userSelection = fileChooser.showOpenDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            java.io.File fileToLoad = fileChooser.getSelectedFile();
+            try {
+                // 1. Cargar nuevo dominio
+                DomainController loadedDomain = DomainController.loadGame(fileToLoad.getAbsolutePath());
+
+                // 2. Reemplazar dominio actual
+                this.domain = loadedDomain;
+
+                // 3. Restaurar estado visual (Re-crear GamePanel)
+                restoreGameState();
+
+                JOptionPane.showMessageDialog(this, "Partida cargada correctamente.");
+
+            } catch (BadOpoException e) {
+                JOptionPane.showMessageDialog(this, "Error al cargar: " + e.getMessage());
+            }
+        }
+    }
+
+    private void restoreGameState() {
+        // Detener timer anterior si existe
+        if (gameLoopTimer != null && gameLoopTimer.isRunning()) {
+            gameLoopTimer.stop();
+        }
+
+        // Crear nuevo GamePanel
+        activeGamePanel = new GamePanel(keyCode -> handleGameInput(keyCode));
+
+        // Configurar el tablero con el nuevo dominio
+        boolean[][] walls = domain.getWallMap();
+        activeGamePanel.setupBoard(walls);
+        activeGamePanel.setPlayerNames(domain.getPlayer1Name(), domain.getPlayer2Name());
+
+        // Cargar fondo (si se puede recuperar el nombre del nivel, sería ideal, sino
+        // usar default)
+        // Como currentLevel está serializado en DomainController, deberíamos poder
+        // acceder a él si lo hiciéramos público.
+        // Por ahora usaremos un fondo genérico o intentaremos deducirlo.
+        // TODO: Agregar getter para currentLevel en DomainController o guardar el nivel
+        // en el nombre del archivo.
+
+        // Mostrar Panel
+        mainPanel.add(activeGamePanel, "GAME");
+        cardLayout.show(mainPanel, "GAME");
+        activeGamePanel.requestFocus();
+
+        // Re-iniciar Timer
+        gameLoopTimer.start();
+
+        // Asegurar estado correcto
+        if (domain.getStatus() == GameStatus.PAUSED) {
+            showPauseOverlay();
+        }
     }
 
     private String[] getMockMap(String level) {

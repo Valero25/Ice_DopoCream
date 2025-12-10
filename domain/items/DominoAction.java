@@ -1,6 +1,6 @@
 package domain.items;
 
-public class DominoAction {
+public class DominoAction implements java.io.Serializable {
     boolean isCreate;
     int x, y;
 

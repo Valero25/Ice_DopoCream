@@ -9,11 +9,11 @@ import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 
-public class LevelLoader {
-    
+public class LevelLoader implements java.io.Serializable {
+
     private Random random;
     private LevelConfiguration config;
-    
+
     public LevelLoader() {
         this.random = new Random();
         this.config = null; // Se establece antes de cargar
@@ -25,7 +25,7 @@ public class LevelLoader {
     public void setConfiguration(LevelConfiguration config) {
         this.config = config;
     }
-    
+
     /**
      * Parsea un mapa de texto y puebla los controladores.
      * 
@@ -51,7 +51,8 @@ public class LevelLoader {
             // Validación básica de dimensiones
             if (row.length() != width) {
                 throw new BadOpoException(
-                    "El mapa no es rectangular en la fila " + y + ". Esperado: " + width + ", Recibido: " + row.length());
+                        "El mapa no es rectangular en la fila " + y + ". Esperado: " + width + ", Recibido: "
+                                + row.length());
             }
 
             for (int x = 0; x < width; x++) {
@@ -121,29 +122,29 @@ public class LevelLoader {
                 break;
         }
     }
-    
+
     /**
      * Spawn enemigos y obstáculos según la configuración personalizada.
      * Las frutas NO se spawnean aquí, se manejan por oleadas.
      */
-    public void applyCustomConfiguration(BoardController board, 
-                                          ItemController items, 
-                                          EnemyController enemies) {
+    public void applyCustomConfiguration(BoardController board,
+            ItemController items,
+            EnemyController enemies) {
         if (config == null) {
             return; // No hay configuración personalizada
         }
-        
+
         // Obtener todas las posiciones válidas (vacías y caminables)
         // Para enemigos y obstáculos no necesitamos verificar items de calor
         List<int[]> validPositions = getValidSpawnPositionsSimple(board);
-        
+
         if (validPositions.isEmpty()) {
             System.err.println("No hay posiciones válidas para spawn personalizado");
             return;
         }
-        
+
         // NO spawneamos frutas aquí - se manejan por oleadas en DomainController
-        
+
         // Spawn enemigos según configuración
         for (String enemyType : config.getActiveEnemyTypes()) {
             int count = config.getEnemyCount(enemyType);
@@ -153,7 +154,7 @@ public class LevelLoader {
                 enemies.spawnEnemy(enemyType, id, pos[0], pos[1]);
             }
         }
-        
+
         // Extensibilidad: obstáculos personalizados
         for (String obstacleType : config.getAllObstacles().keySet()) {
             int count = config.getObstacleCount(obstacleType);
@@ -164,9 +165,10 @@ public class LevelLoader {
             }
         }
     }
-    
+
     /**
      * Spawnea una oleada específica de frutas según la configuración.
+     * 
      * @param waveIndex índice de la oleada (0 = primera fruta, 1 = segunda, etc.)
      * @return true si se spawneó una oleada, false si no hay más oleadas
      */
@@ -174,28 +176,28 @@ public class LevelLoader {
         if (config == null) {
             return false;
         }
-        
+
         List<String> activeFruits = config.getActiveFruitTypes();
         if (waveIndex >= activeFruits.size()) {
             return false; // No hay más oleadas
         }
-        
+
         String fruitType = activeFruits.get(waveIndex);
         int count = config.getFruitCount(fruitType);
-        
+
         // Obtener posiciones válidas (evitando items de calor)
         List<int[]> validPositions = getValidSpawnPositions(board, items);
-        
+
         // Spawn todas las frutas de este tipo
         for (int i = 0; i < count && !validPositions.isEmpty(); i++) {
             int[] pos = getRandomPosition(validPositions);
             String id = "wave" + waveIndex + "_" + fruitType + "_" + i;
             items.spawnFruit(fruitType, id, pos[0], pos[1]);
         }
-        
+
         return true; // Se spawneó correctamente
     }
-    
+
     /**
      * Verifica si hay más oleadas disponibles
      */
@@ -206,19 +208,20 @@ public class LevelLoader {
         List<String> activeFruits = config.getActiveFruitTypes();
         return currentWave < activeFruits.size();
     }
-    
+
     /**
      * Obtiene todas las posiciones válidas para spawn de frutas.
      * Las frutas NO pueden aparecer sobre:
      * - Items de calor (CAMPFIRE o HOT_TILE)
      * - Bloques de hielo iniciales (ICE_BLOCK)
-     * Las frutas pueden quedar DEBAJO de hielo creado por el jugador durante el juego.
+     * Las frutas pueden quedar DEBAJO de hielo creado por el jugador durante el
+     * juego.
      */
     private List<int[]> getValidSpawnPositions(BoardController board, ItemController items) {
         List<int[]> positions = new ArrayList<>();
         int width = board.getWidth();
         int height = board.getHeight();
-        
+
         // Evitar bordes y posiciones iniciales de jugadores
         for (int y = 2; y < height - 2; y++) {
             for (int x = 2; x < width - 2; x++) {
@@ -226,25 +229,25 @@ public class LevelLoader {
                 if ((x <= 2 && y <= 2) || (x >= width - 3 && y >= height - 3)) {
                     continue;
                 }
-                
+
                 // Verificar que la celda sea caminable
                 if (!board.isWalkable(x, y)) {
                     continue;
                 }
-                
+
                 // Verificar que NO haya items de calor u obstáculos en esta posición
                 if (hasBlockingItemAt(x, y, items)) {
                     continue;
                 }
-                
+
                 // La posición es válida
-                positions.add(new int[]{x, y});
+                positions.add(new int[] { x, y });
             }
         }
-        
+
         return positions;
     }
-    
+
     /**
      * Verifica si hay un item que bloquea el spawn de frutas en la posición dada.
      * Incluye: CAMPFIRE, HOT_TILE, ICE_BLOCK (bloques de hielo iniciales)
@@ -255,15 +258,15 @@ public class LevelLoader {
             if (item.getX() == x && item.getY() == y) {
                 String type = item.getType();
                 // Verificar si es un item que bloquea spawn de frutas
-                if ("HOT_TILE".equals(type) || "CAMPFIRE".equals(type) || 
-                    "CAMPFIRE_OFF".equals(type) || "ICE".equals(type) || "ICE_BLOCK".equals(type)) {
+                if ("HOT_TILE".equals(type) || "CAMPFIRE".equals(type) ||
+                        "CAMPFIRE_OFF".equals(type) || "ICE".equals(type) || "ICE_BLOCK".equals(type)) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
+
     /**
      * Obtiene posiciones válidas simples (para enemigos y obstáculos)
      * sin verificar items de calor.
@@ -272,7 +275,7 @@ public class LevelLoader {
         List<int[]> positions = new ArrayList<>();
         int width = board.getWidth();
         int height = board.getHeight();
-        
+
         // Evitar bordes y posiciones iniciales de jugadores
         for (int y = 2; y < height - 2; y++) {
             for (int x = 2; x < width - 2; x++) {
@@ -280,22 +283,22 @@ public class LevelLoader {
                 if ((x <= 2 && y <= 2) || (x >= width - 3 && y >= height - 3)) {
                     continue;
                 }
-                
+
                 if (board.isWalkable(x, y)) {
-                    positions.add(new int[]{x, y});
+                    positions.add(new int[] { x, y });
                 }
             }
         }
-        
+
         return positions;
     }
-    
+
     /**
      * Obtiene y remueve una posición aleatoria de la lista
      */
     private int[] getRandomPosition(List<int[]> positions) {
         if (positions.isEmpty()) {
-            return new int[]{5, 5}; // Fallback
+            return new int[] { 5, 5 }; // Fallback
         }
         int index = random.nextInt(positions.size());
         return positions.remove(index);

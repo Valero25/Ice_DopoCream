@@ -5,10 +5,10 @@ package domain.players;
  * Cada sabor determina la apariencia visual (color/sprite) del jugador.
  */
 public enum IceCreamFlavor {
-    
+
     VANILLA,
-    
+
     CHOCOLATE,
-    
+
     STRAWBERRY
 }

@@ -6,7 +6,7 @@ import domain.shared.BadOpoException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardController {
+public class BoardController implements java.io.Serializable {
 
     private int width;
     private int height;

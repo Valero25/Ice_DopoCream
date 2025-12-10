@@ -9,7 +9,7 @@ import domain.shared.EntityInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemController {
+public class ItemController implements java.io.Serializable {
 
     private BoardController boardCtrl;
     private List<Item> items;

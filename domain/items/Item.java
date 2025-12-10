@@ -2,7 +2,7 @@ package domain.items;
 
 import domain.board.BoardController;
 
-public abstract class Item {
+public abstract class Item implements java.io.Serializable {
     protected String id;
     protected int x;
     protected int y;

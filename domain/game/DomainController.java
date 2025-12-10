@@ -17,7 +17,8 @@ import domain.shared.GameStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DomainController {
+public class DomainController implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
 
     // --- SUB-CONTROLADORES ---
     private BoardController boardCtrl;
@@ -60,7 +61,6 @@ public class DomainController {
 
         // Valores por defecto
         this.status = GameStatus.PAUSED;
-        // this.maxTime = 180.0f; // 3 minutos [cite: 77] // Initialized at declaration
         this.scoreP1 = 0;
         this.scoreP2 = 0;
         this.currentWave = 0;
@@ -70,6 +70,29 @@ public class DomainController {
         this.gameMode = "PVP";
         this.p1Flavor = IceCreamFlavor.VANILLA;
         this.p2Selection = "CHOCOLATE";
+    }
+
+    /**
+     * Guarda el estado actual del juego en un archivo.
+     */
+    public void saveGame(String fileName) throws BadOpoException {
+        try (java.io.ObjectOutputStream out = new java.io.ObjectOutputStream(new java.io.FileOutputStream(fileName))) {
+            out.writeObject(this);
+        } catch (java.io.IOException e) {
+            throw new BadOpoException("Error al guardar la partida: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Carga un estado de juego desde un archivo.
+     * Retorna una NUEVA instancia de DomainController con el estado cargado.
+     */
+    public static DomainController loadGame(String fileName) throws BadOpoException {
+        try (java.io.ObjectInputStream in = new java.io.ObjectInputStream(new java.io.FileInputStream(fileName))) {
+            return (DomainController) in.readObject();
+        } catch (java.io.IOException | ClassNotFoundException e) {
+            throw new BadOpoException("Error al cargar la partida: " + e.getMessage());
+        }
     }
 
     // =============================================================
@@ -109,9 +132,12 @@ public class DomainController {
 
     /**
      * Configura el sabor del jugador 2 / máquina.
-     * En PVP: Es un sabor del jugador 2 humano ("CHOCOLATE", "VANILLA", "STRAWBERRY").
-     * En PVM: Es un sabor de la máquina controlada por IA ("CHOCOLATE", "VANILLA", "STRAWBERRY").
-     * En MVM: Es un sabor de la segunda máquina ("CHOCOLATE", "VANILLA", "STRAWBERRY").
+     * En PVP: Es un sabor del jugador 2 humano ("CHOCOLATE", "VANILLA",
+     * "STRAWBERRY").
+     * En PVM: Es un sabor de la máquina controlada por IA ("CHOCOLATE", "VANILLA",
+     * "STRAWBERRY").
+     * En MVM: Es un sabor de la segunda máquina ("CHOCOLATE", "VANILLA",
+     * "STRAWBERRY").
      */
     public void setPlayer2Flavor(String selection) {
         // Guardamos el String crudo del sabor
@@ -161,7 +187,7 @@ public class DomainController {
     public String getPlayer2Name() {
         return playerCtrl.getPlayerName("player2");
     }
-    
+
     /**
      * Establece la configuración personalizada del nivel
      */
@@ -211,7 +237,7 @@ public class DomainController {
         this.winner = null;
         this.currentWave = 0;
         this.waveSpawned = false;
-        
+
         // Spawear la primera oleada de frutas al iniciar
         spawnNextWave();
     }
@@ -273,7 +299,7 @@ public class DomainController {
 
             // Usar la dificultad seleccionada (p2Difficulty debería estar configurada)
             PlayerType typeP2 = (p2Difficulty != null) ? p2Difficulty : PlayerType.MACHINE_HUNGRY;
-            
+
             playerCtrl.addPlayer("player2", f2, typeP2, p2X, p2Y);
             playerCtrl.setPlayerName("player2", p2Name);
         }
@@ -281,10 +307,12 @@ public class DomainController {
 
     /**
      * Spawn la siguiente oleada de frutas según la configuración personalizada
+     * 
      * @return true si se spawneó una oleada, false si no hay más oleadas
      */
     private boolean spawnNextWave() {
-        // Usar el LevelLoader para spawnear la oleada actual según la configuración personalizada
+        // Usar el LevelLoader para spawnear la oleada actual según la configuración
+        // personalizada
         boolean spawned = levelLoader.spawnFruitWave(currentWave, boardCtrl, itemCtrl);
         waveSpawned = true;
         return spawned;
@@ -323,14 +351,14 @@ public class DomainController {
             if (!waveSpawned) {
                 currentWave++;
                 boolean moreWaves = spawnNextWave();
-                
+
                 // Si no hay más oleadas, determinar ganador
                 if (!moreWaves) {
                     status = GameStatus.WON;
                     determineWinnerByScore();
                     return;
                 }
-                
+
                 waveSpawned = true;
             }
         } else {
@@ -396,7 +424,7 @@ public class DomainController {
     public GameStatus getStatus() {
         return status;
     }
-    
+
     public GameStatus getGameStatus() {
         return status;
     }
@@ -444,7 +472,7 @@ public class DomainController {
     private void checkCollisions() {
         checkPlayerCollision("player1");
         checkPlayerCollision("player2");
-        
+
         // Después de revisar colisiones, verificar si el juego debe terminar
         checkGameEndConditions();
     }
@@ -461,7 +489,7 @@ public class DomainController {
         // Contra enemigos
         if (enemyCtrl.checkCollision(pos[0], pos[1])) {
             playerCtrl.killPlayer(pid);
-            
+
             // Solo terminar inmediatamente en modo SINGLE
             if (gameMode.equals("SINGLE")) {
                 status = GameStatus.GAME_OVER;
@@ -472,7 +500,7 @@ public class DomainController {
         // Contra cactus con púas (peligroso)
         if (itemCtrl.hasDangerousCactusAt(pos[0], pos[1])) {
             playerCtrl.killPlayer(pid);
-            
+
             // Solo terminar inmediatamente en modo SINGLE
             if (gameMode.equals("SINGLE")) {
                 status = GameStatus.GAME_OVER;
@@ -485,7 +513,7 @@ public class DomainController {
         if (points == -1) {
             // Item letal (fuego, etc.)
             playerCtrl.killPlayer(pid);
-            
+
             // Solo terminar inmediatamente en modo SINGLE
             if (gameMode.equals("SINGLE")) {
                 status = GameStatus.GAME_OVER;
@@ -497,7 +525,7 @@ public class DomainController {
                 scoreP2 += points;
         }
     }
-    
+
     /**
      * Verifica si el juego debe terminar en modos multijugador
      */
@@ -505,11 +533,11 @@ public class DomainController {
         // En modo SINGLE, el juego ya termina en checkPlayerCollision
         if (gameMode.equals("SINGLE"))
             return;
-            
+
         // En modos multijugador (PVP, PVM, MVM)
         boolean p1Alive = playerCtrl.isPlayerAlive("player1");
         boolean p2Alive = playerCtrl.isPlayerAlive("player2");
-        
+
         // Si ambos están muertos, Game Over
         if (!p1Alive && !p2Alive) {
             status = GameStatus.GAME_OVER;
@@ -518,15 +546,15 @@ public class DomainController {
         // Si solo uno murió, establecer ganador provisional pero continuar jugando
         else if (!p1Alive && p2Alive) {
             winner = playerCtrl.getPlayerName("player2");
-        }
-        else if (p1Alive && !p2Alive) {
+        } else if (p1Alive && !p2Alive) {
             winner = playerCtrl.getPlayerName("player1");
         }
     }
-    
+
     /**
      * Determina el ganador basado en la puntuación.
-     * Se llama cuando el juego termina por timeout o cuando se recolectan todas las frutas.
+     * Se llama cuando el juego termina por timeout o cuando se recolectan todas las
+     * frutas.
      */
     private void determineWinnerByScore() {
         // En modo SINGLE no hay competencia
@@ -534,7 +562,7 @@ public class DomainController {
             winner = null;
             return;
         }
-        
+
         // En modos multijugador, comparar puntuaciones
         if (scoreP1 > scoreP2) {
             winner = playerCtrl.getPlayerName("player1");

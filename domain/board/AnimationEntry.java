@@ -2,7 +2,7 @@ package domain.board;
 
 import domain.shared.EntityType;
 
-public class AnimationEntry {
+public class AnimationEntry implements java.io.Serializable {
     int x, y;
     EntityType targetType; // EMPTY (destruir) o ICE_BLOCK (crear)
     float delay;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-public class EnemyController {
+public class EnemyController implements java.io.Serializable {
 
     private BoardController boardCtrl;
     private ItemController itemCtrl; // Necesario para gestionar rotura de hielo

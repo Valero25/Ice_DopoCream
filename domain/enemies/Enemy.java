@@ -2,7 +2,7 @@ package domain.enemies;
 
 import domain.shared.Direction;
 
-public abstract class Enemy {
+public abstract class Enemy implements java.io.Serializable {
     protected String id;
     protected int x;
     protected int y;

@@ -1,6 +1,6 @@
 package domain.shared;
 
-public class EntityInfo {
+public class EntityInfo implements java.io.Serializable {
     // Datos inmutables o simples para que la vista dibuje
     public final String id;
     public final int x;

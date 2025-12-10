@@ -11,7 +11,7 @@ import domain.shared.EntityInfo;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerController {
+public class PlayerController implements java.io.Serializable {
 
     private BoardController boardCtrl;
     private ItemController itemCtrl;
@@ -66,7 +66,7 @@ public class PlayerController {
     /**
      * Establece el nombre personalizado de un jugador.
      * 
-     * @param id ID del jugador
+     * @param id   ID del jugador
      * @param name Nombre a asignar
      */
     public void setPlayerName(String id, String name) {

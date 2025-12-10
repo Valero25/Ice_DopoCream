@@ -7,7 +7,7 @@ import domain.shared.Direction;
  * Clase base que representa un jugador (helado) en el juego.
  * Contiene la posicion, puntuacion, estado de vida y apariencia del personaje.
  */
-public class IceCream {
+public class IceCream implements java.io.Serializable {
 
     private String id;
     private int x;

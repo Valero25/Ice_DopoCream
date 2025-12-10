@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class PauseOverlay extends JPanel {
 
-    public PauseOverlay(Runnable onResume, Runnable onMenu) {
+    public PauseOverlay(Runnable onResume, Runnable onSave, Runnable onMenu) {
         setLayout(new GridBagLayout());
         setOpaque(false);
 
@@ -26,6 +26,13 @@ public class PauseOverlay extends JPanel {
         JButton resumeBtn = createPauseButton("REANUDAR (P)");
         resumeBtn.addActionListener(e -> onResume.run());
         pausePanel.add(resumeBtn);
+
+        pausePanel.add(Box.createVerticalStrut(20));
+
+        // Botón Guardar
+        JButton saveBtn = createPauseButton("GUARDAR");
+        saveBtn.addActionListener(e -> onSave.run());
+        pausePanel.add(saveBtn);
 
         pausePanel.add(Box.createVerticalStrut(20));
 
