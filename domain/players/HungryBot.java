@@ -5,8 +5,21 @@ import domain.shared.EntityInfo;
 import java.util.List;
 
 /**
- * Bot que persigue la fruta mas cercana.
- * Estrategia: Ir hacia la fruta mas proxima o moverse al azar si no hay.
+ * Bot Hambriento que persigue la fruta mas cercana.
+ * Estrategia simple: Ir hacia la fruta mas proxima sin considerar enemigos.
+ * Si no hay frutas disponibles, se mueve aleatoriamente.
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Prioridad: Recolectar frutas</li>
+ *   <li>No evita enemigos activamente</li>
+ *   <li>Movimiento aleatorio cuando no hay frutas</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BotPlayer
+ * @see PlayerType#MACHINE_HUNGRY
  */
 public class HungryBot extends BotPlayer {
 

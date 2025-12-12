@@ -3,6 +3,18 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Cargador especializado de archivos GIF animados.
+ * Permite cargar GIFs desde una carpeta base y escalarlos.
+ * 
+ * <p>Nota: El escalado de GIFs pierde la animacion,
+ * por lo que se recomienda usar solo para imagenes estaticas
+ * o cuando la animacion no es necesaria.</p>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see ImageLoader
+ */
 public class GifLoader {
 
     private final String carpetaBase;

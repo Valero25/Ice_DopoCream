@@ -4,6 +4,23 @@ import domain.shared.EntityType;
 
 import java.io.Serializable;
 
+/**
+ * Representa una celda individual del tablero de juego.
+ * Cada celda puede contener diferentes tipos de contenido (muro, hielo, vacio)
+ * y mantiene informacion sobre su estado de animacion.
+ * 
+ * <p>Estados posibles del contenido:</p>
+ * <ul>
+ *   <li>WALL - Muro indestructible</li>
+ *   <li>ICE_BLOCK - Bloque de hielo destructible</li>
+ *   <li>EMPTY - Celda vacia transitable</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BoardController
+ * @see EntityType
+ */
 class Cell implements Serializable {
     private static final long serialVersionUID = 1L;
     private EntityType content; // WALL, ICE_BLOCK, EMPTY

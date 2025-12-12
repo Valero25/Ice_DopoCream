@@ -8,7 +8,30 @@ import java.util.Random;
 
 /**
  * Clase abstracta base para todos los jugadores controlados por IA.
- * Extiende IceCream y proporciona funcionalidad comun para los bots.
+ * Extiende IceCream y proporciona funcionalidad comun para los bots,
+ * incluyendo sistema de temporizador y metodos utilitarios de navegacion.
+ * 
+ * <p>Funcionalidades comunes:</p>
+ * <ul>
+ *   <li>Sistema de temporizador para controlar frecuencia de movimiento</li>
+ *   <li>Metodos para encontrar entidades cercanas</li>
+ *   <li>Algoritmos de direccion hacia/alejandose de objetivos</li>
+ *   <li>Seleccion aleatoria de direcciones validas</li>
+ * </ul>
+ * 
+ * <p>Tipos de bots implementados:</p>
+ * <ul>
+ *   <li>HungryBot - Persigue frutas</li>
+ *   <li>FearfulBot - Huye de enemigos</li>
+ *   <li>ExpertBot - Estrategia combinada</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see IceCream
+ * @see HungryBot
+ * @see FearfulBot
+ * @see ExpertBot
  */
 public abstract class BotPlayer extends IceCream {
 

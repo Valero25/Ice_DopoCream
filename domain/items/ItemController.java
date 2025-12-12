@@ -9,6 +9,25 @@ import domain.shared.EntityInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controlador que gestiona todos los items del juego (frutas y obstaculos).
+ * Maneja la creacion, actualizacion, recoleccion y destruccion de items.
+ * 
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *   <li>Crear y mantener la lista de items activos</li>
+ *   <li>Gestionar el efecto domino para creacion/destruccion de hielo</li>
+ *   <li>Detectar recoleccion de frutas y calcular puntos</li>
+ *   <li>Verificar obstaculos y elementos peligrosos</li>
+ *   <li>Proporcionar informacion visual para la GUI</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Item
+ * @see Fruit
+ * @see Obstacle
+ */
 public class ItemController implements java.io.Serializable {
 
     private BoardController boardCtrl;

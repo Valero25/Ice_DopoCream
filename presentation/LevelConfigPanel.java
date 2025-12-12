@@ -6,6 +6,25 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Panel de configuracion personalizada del nivel.
+ * Permite ajustar parametros del juego antes de iniciar.
+ * Extiende StandardBackgroundPanel para el fondo visual.
+ * 
+ * <p>Parametros configurables:</p>
+ * <ul>
+ *   <li>Duracion de la partida</li>
+ *   <li>Cantidad y tipos de frutas (con checkboxes y spinners)</li>
+ *   <li>Cantidad y tipos de enemigos</li>
+ *   <li>Cantidad de obstaculos</li>
+ *   <li>Archivo de mapa personalizado</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelConfiguration
+ * @see StandardBackgroundPanel
+ */
 public class LevelConfigPanel extends StandardBackgroundPanel {
 
     private LevelConfiguration config;

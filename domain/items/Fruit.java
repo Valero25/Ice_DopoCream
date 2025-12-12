@@ -1,5 +1,27 @@
 package domain.items;
 
+/**
+ * Clase abstracta base para todas las frutas coleccionables del juego.
+ * Las frutas otorgan puntos al ser recolectadas por los jugadores.
+ * 
+ * <p>Tipos de frutas disponibles:</p>
+ * <ul>
+ *   <li>Banana - 100 puntos, estatica</li>
+ *   <li>Grape (Uva) - 50 puntos, estatica</li>
+ *   <li>Pineapple (Piña) - 200 puntos, se mueve cuando el jugador se mueve</li>
+ *   <li>Cherry (Cereza) - 150 puntos, se teletransporta cada 20 segundos</li>
+ *   <li>Cactus - 250 puntos, alterna entre puas (peligroso) y seguro cada 30s</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Item
+ * @see Banana
+ * @see Grape
+ * @see Pineapple
+ * @see Cherry
+ * @see Cactus
+ */
 public abstract class Fruit extends Item {
     protected int score;
 

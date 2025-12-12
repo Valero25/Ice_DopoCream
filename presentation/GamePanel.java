@@ -9,6 +9,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Panel que renderiza el estado del juego y maneja el input del usuario.
+ * Responsable de dibujar el tablero, entidades, jugadores y HUD.
+ * 
+ * <p>Elementos visuales:</p>
+ * <ul>
+ *   <li>Fondo del nivel</li>
+ *   <li>Grid del tablero con muros</li>
+ *   <li>Entidades (frutas, enemigos, obstaculos)</li>
+ *   <li>Jugadores (separados de las entidades)</li>
+ *   <li>HUD con tiempo, puntajes y frutas restantes</li>
+ * </ul>
+ * 
+ * <p>Input soportado:</p>
+ * <ul>
+ *   <li>WASD + Espacio + E para Jugador 1</li>
+ *   <li>Flechas + Enter + Shift para Jugador 2</li>
+ *   <li>P para pausar</li>
+ *   <li>ESC para volver al menu</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ * @see ImageLoader
+ */
 public class GamePanel extends JPanel {
 
     private ImageLoader loader;

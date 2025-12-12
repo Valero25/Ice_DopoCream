@@ -3,6 +3,20 @@ package domain.items;
 import domain.board.BoardController;
 import java.util.Random;
 
+/**
+ * Fruta Piña que se mueve aleatoriamente cuando el jugador se mueve.
+ * Otorga 200 puntos al ser recolectada.
+ * 
+ * <p>Comportamiento especial:</p>
+ * <ul>
+ *   <li>Se mueve una casilla en direccion aleatoria cada vez que el jugador se mueve</li>
+ *   <li>Solo se mueve a casillas validas (no muros, no obstaculos)</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Fruit
+ */
 public class Pineapple extends Fruit {
 
     private Random random;

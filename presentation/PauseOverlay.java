@@ -3,6 +3,21 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Overlay de pausa que se superpone sobre el panel de juego.
+ * Proporciona opciones para continuar, guardar o salir del juego.
+ * 
+ * <p>Opciones disponibles:</p>
+ * <ul>
+ *   <li>Continuar - Reanudar la partida</li>
+ *   <li>Guardar - Persistir el estado actual</li>
+ *   <li>Salir - Volver al menu principal</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see GamePanel
+ */
 public class PauseOverlay extends JPanel {
 
     public PauseOverlay(Runnable onResume, Runnable onSave, Runnable onMenu) {

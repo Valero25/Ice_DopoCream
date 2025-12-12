@@ -5,6 +5,24 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Ventana de seleccion de modo de juego (clase legacy).
+ * Proporciona una interfaz para elegir entre modos de juego.
+ * 
+ * <p>Modos disponibles:</p>
+ * <ul>
+ *   <li>PvsP - Jugador vs Jugador</li>
+ *   <li>PvsM - Jugador vs Maquina</li>
+ *   <li>MvsM - Maquina vs Maquina</li>
+ * </ul>
+ * 
+ * <p>Nota: Esta clase puede estar siendo reemplazada por
+ * ModeSelectionPanel en la nueva arquitectura.</p>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see ModeSelectionPanel
+ */
 public class ModeSelection extends JFrame {
 
     private Font pixelFont;

@@ -1,5 +1,13 @@
 package domain.items;
 
+/**
+ * Fruta Uva estatica que otorga 50 puntos al ser recolectada.
+ * Es la fruta de menor valor, ideal para niveles iniciales.
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Fruit
+ */
 public class Grape extends Fruit {
 
     public Grape(String id, int x, int y) {

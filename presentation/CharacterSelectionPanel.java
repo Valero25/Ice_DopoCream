@@ -6,6 +6,28 @@ import java.util.function.Consumer;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Panel para la seleccion de personajes (sabores de helado).
+ * Permite a los jugadores elegir su sabor antes de iniciar la partida.
+ * 
+ * <p>Sabores disponibles:</p>
+ * <ul>
+ *   <li>VANILLA - Vainilla</li>
+ *   <li>CHOCOLATE - Chocolate</li>
+ *   <li>STRAWBERRY - Fresa</li>
+ * </ul>
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Muestra iconos de cada sabor con hover effects</li>
+ *   <li>Soporta seleccion para uno o dos jugadores</li>
+ *   <li>Diferencia entre jugadores humanos y bots</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see SelectionCallback
+ */
 public class CharacterSelectionPanel extends JPanel {
     private ImageLoader loader;
     private Image bgImg;

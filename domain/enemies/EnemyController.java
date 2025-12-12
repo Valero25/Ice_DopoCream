@@ -8,6 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
+/**
+ * Controlador que gestiona todos los enemigos activos en el juego.
+ * Maneja la creacion, actualizacion de IA, movimiento y colisiones de enemigos.
+ * 
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *   <li>Crear y mantener la lista de enemigos activos</li>
+ *   <li>Actualizar la IA y movimiento de cada enemigo</li>
+ *   <li>Validar movimientos contra el tablero y obstaculos</li>
+ *   <li>Detectar colisiones con jugadores</li>
+ *   <li>Proporcionar informacion visual para la GUI</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Enemy
+ * @see BoardController
+ * @see ItemController
+ */
 public class EnemyController implements java.io.Serializable {
 
     private BoardController boardCtrl;

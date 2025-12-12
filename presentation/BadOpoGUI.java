@@ -14,6 +14,35 @@ import java.util.Map;
 
 import domain.shared.BadOpoLogger;
 
+/**
+ * Ventana principal de la interfaz grafica del juego Bad DOPO Cream.
+ * Gestiona la navegacion entre pantallas y el ciclo de juego (game loop).
+ * 
+ * <p>Pantallas gestionadas:</p>
+ * <ul>
+ *   <li>SPLASH - Pantalla de inicio con animacion</li>
+ *   <li>HOME - Menu principal con opciones</li>
+ *   <li>MODE - Seleccion de modo de juego</li>
+ *   <li>CHAR - Seleccion de personajes</li>
+ *   <li>LEVEL - Seleccion de nivel</li>
+ *   <li>LEVEL_CONFIG - Configuracion personalizada del nivel</li>
+ *   <li>GAME - Pantalla de juego activo</li>
+ *   <li>GAME_OVER - Pantalla de resultados</li>
+ * </ul>
+ * 
+ * <p>Responsabilidades:</p>
+ * <ul>
+ *   <li>Coordinar navegacion entre pantallas usando CardLayout</li>
+ *   <li>Ejecutar el game loop a 60 FPS</li>
+ *   <li>Traducir input de teclado a acciones del dominio</li>
+ *   <li>Gestionar persistencia (guardar/cargar partidas)</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see DomainController
+ * @see GamePanel
+ */
 public class BadOpoGUI extends JFrame {
 
     private DomainController domain;

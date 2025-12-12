@@ -5,6 +5,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
+/**
+ * Listener para iconos de personajes con estados visuales.
+ * Maneja los efectos hover y click en los iconos de seleccion de personaje.
+ * 
+ * <p>Estados visuales:</p>
+ * <ul>
+ *   <li>idle - Estado normal del icono</li>
+ *   <li>hover - Cuando el cursor esta sobre el icono</li>
+ *   <li>click - Cuando se hace clic en el icono</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see CharacterSelectionPanel
+ */
 public class CharacterIconListener extends MouseAdapter {
     private JLabel lbl;
     private ImageIcon idle;

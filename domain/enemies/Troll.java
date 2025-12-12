@@ -2,6 +2,23 @@ package domain.enemies;
 
 import domain.shared.Direction;
 
+/**
+ * Enemigo Troll con patron de patrullaje.
+ * Se mueve en linea recta y gira 90 grados a la derecha cuando choca con un obstaculo.
+ * No persigue activamente al jugador.
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Velocidad: ~3.3 movimientos por segundo</li>
+ *   <li>Comportamiento: Patrullaje en linea recta</li>
+ *   <li>Al chocar: Gira 90 grados en sentido horario</li>
+ *   <li>No puede romper bloques de hielo</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Enemy
+ */
 public class Troll extends Enemy {
 
     private Direction currentDir;

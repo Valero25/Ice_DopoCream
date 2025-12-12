@@ -1,5 +1,0 @@
-#BlueJ class context
-comment0.target=EntityInfo
-comment1.params=id\ x\ y\ type\ isDestructible
-comment1.target=EntityInfo(java.lang.String,\ int,\ int,\ java.lang.String,\ boolean)
-numComments=2

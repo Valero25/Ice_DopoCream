@@ -1,5 +1,15 @@
 package domain.items;
 
+/**
+ * Baldosa caliente que derrite instantaneamente los bloques de hielo.
+ * El jugador puede caminar sobre ella sin peligro.
+ * Impide la creacion de bloques de hielo en su posicion.
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Obstacle
+ * @see IceBlock
+ */
 public class HotTile extends Obstacle {
 
     public HotTile(String id, int x, int y) {

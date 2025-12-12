@@ -2,6 +2,31 @@ package domain.items;
 
 import domain.board.BoardController;
 
+/**
+ * Clase abstracta base para todos los items del juego.
+ * Define la estructura comun para frutas, obstaculos y otros objetos coleccionables
+ * o interactivos en el tablero.
+ * 
+ * <p>Tipos de items:</p>
+ * <ul>
+ *   <li>Frutas - Coleccionables que otorgan puntos</li>
+ *   <li>Obstaculos - Bloquean el paso o causan efectos</li>
+ * </ul>
+ * 
+ * <p>Caracteristicas polimorficas:</p>
+ * <ul>
+ *   <li>isWalkable() - Si el jugador puede pasar sobre el item</li>
+ *   <li>isCollectable() - Si el item puede ser recolectado</li>
+ *   <li>isDangerous() - Si el item causa dano al jugador</li>
+ *   <li>isDestructible() - Si puede ser destruido</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Fruit
+ * @see Obstacle
+ * @see ItemController
+ */
 public abstract class Item implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     protected String id;

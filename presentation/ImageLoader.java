@@ -6,6 +6,29 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Cargador y cache de imagenes para la interfaz grafica.
+ * Proporciona acceso centralizado a todas las imagenes del juego.
+ * 
+ * <p>Tipos de recursos gestionados:</p>
+ * <ul>
+ *   <li>Fondos de pantalla para cada estado del juego</li>
+ *   <li>Sprites de jugadores (por sabor y direccion)</li>
+ *   <li>Sprites de enemigos (por tipo y direccion)</li>
+ *   <li>Imagenes de frutas y obstaculos</li>
+ *   <li>Iconos y elementos de UI</li>
+ * </ul>
+ * 
+ * <p>Optimizaciones:</p>
+ * <ul>
+ *   <li>Cache de imagenes para evitar cargas repetidas</li>
+ *   <li>Escalado automatico de sprites</li>
+ *   <li>Soporte para ImageIcon y Image</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ */
 public class ImageLoader {
 
     private Map<String, Image> cache;
@@ -67,15 +90,15 @@ public class ImageLoader {
             case "MENU_BOARD":
                 path = "/presentation/menu.png";
                 break;
-                
+
             case "LEVEL_1":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
-                
+
             case "LEVEL_2":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
-                
+
             case "LEVEL_3":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
@@ -177,8 +200,10 @@ public class ImageLoader {
                 break;
 
             case "CAMPFIRE":
-            case "CAMPFIRE_OFF":
                 path = "/presentation/fogata.png";
+                break;
+            case "CAMPFIRE_OFF":
+                path = "/presentation/fogataazul.png";
                 break;
 
             case "HOT_TILE":

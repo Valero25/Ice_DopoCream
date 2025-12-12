@@ -6,9 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Clase que representa la configuración personalizable de un nivel.
- * Permite definir qué frutas y enemigos aparecerán y en qué cantidad.
- * Diseñada para ser extensible a futuro (nuevos tipos de entidades).
+ * Clase que representa la configuracion personalizable de un nivel.
+ * Permite definir que frutas, enemigos y obstaculos apareceran y en que cantidad.
+ * Disenada para ser extensible a futuro con nuevos tipos de entidades.
+ * 
+ * <p>Configuraciones disponibles:</p>
+ * <ul>
+ *   <li>Frutas - Tipo y cantidad de cada fruta (determina oleadas)</li>
+ *   <li>Enemigos - Tipo y cantidad de cada enemigo</li>
+ *   <li>Obstaculos - Tipo y cantidad de obstaculos especiales</li>
+ *   <li>Parametros personalizados - Extension para futuras caracteristicas</li>
+ * </ul>
+ * 
+ * <p>Valores por defecto:</p>
+ * <ul>
+ *   <li>Frutas: 5 Bananas, 5 Uvas, 3 Piñas, 3 Cerezas, 2 Cactus</li>
+ *   <li>Enemigos: 2 Trolls, 1 Calamar, 1 Maceta, 1 Narval</li>
+ *   <li>Obstaculos: 3 Bloques de hielo, 2 Fogatas, 4 Baldosas calientes</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelLoader
+ * @see LevelInfo
  */
 public class LevelConfiguration implements java.io.Serializable {
 

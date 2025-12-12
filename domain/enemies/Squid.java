@@ -2,6 +2,22 @@ package domain.enemies;
 
 import domain.shared.Direction;
 
+/**
+ * Enemigo Calamar (Squid) con habilidad de romper hielo.
+ * Similar a la Maceta, persigue al jugador directamente,
+ * pero tiene la capacidad especial de destruir bloques de hielo.
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Velocidad: ~3.3 movimientos por segundo</li>
+ *   <li>Comportamiento: Persecucion directa</li>
+ *   <li>Habilidad especial: Puede romper bloques de hielo</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Enemy
+ */
 public class Squid extends Enemy {
 
     public Squid(String id, int x, int y) {

@@ -2,6 +2,24 @@ package domain.enemies;
 
 import domain.shared.Direction;
 
+/**
+ * Clase abstracta base para todos los enemigos del juego.
+ * Define la estructura comun y comportamiento basico de los enemigos,
+ * incluyendo posicion, velocidad y sistema de temporizador de movimiento.
+ * 
+ * <p>Tipos de enemigos disponibles:</p>
+ * <ul>
+ *   <li>Troll - Patrulla en linea recta, gira al chocar</li>
+ *   <li>FlowerPot (Maceta) - Persigue al jugador directamente</li>
+ *   <li>Squid (Calamar) - Persigue y puede romper hielo</li>
+ *   <li>Narwhal (Narval) - Embiste al alinearse con el jugador</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see EnemyController
+ * @see Direction
+ */
 public abstract class Enemy implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     protected String id;

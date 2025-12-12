@@ -3,6 +3,15 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel de pantalla de inicio (splash screen).
+ * Muestra una animacion o imagen de bienvenida.
+ * El usuario puede hacer clic para continuar al menu principal.
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ */
 public class SplashPanel extends JPanel {
     private Image splashImage;
 

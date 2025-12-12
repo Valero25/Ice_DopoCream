@@ -1,5 +1,23 @@
 package domain.items;
 
+/**
+ * Bloque de hielo destructible creado por los jugadores.
+ * Puede ser destruido por jugadores o ciertos enemigos.
+ * Se derrite instantaneamente sobre baldosas calientes.
+ * 
+ * <p>Interacciones:</p>
+ * <ul>
+ *   <li>Los jugadores pueden crearlo y destruirlo con habilidades</li>
+ *   <li>El Calamar puede destruirlo</li>
+ *   <li>El Narval puede destruirlo durante embestida</li>
+ *   <li>Se derrite sobre HotTile</li>
+ *   <li>Al romperse sobre una fogata, la apaga temporalmente</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Obstacle
+ */
 public class IceBlock extends Obstacle {
 
     public IceBlock(String id, int x, int y) {

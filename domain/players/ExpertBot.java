@@ -6,8 +6,28 @@ import domain.shared.EntityInfo;
 import java.util.List;
 
 /**
- * Bot experto que combina estrategias de huida y recoleccion.
- * Estrategia: Huir si hay peligro, recolectar frutas si es seguro.
+ * Bot Experto que combina estrategias de huida y recoleccion.
+ * El bot mas inteligente, evalua multiples factores antes de decidir.
+ * 
+ * <p>Estrategia por prioridad:</p>
+ * <ol>
+ *   <li>Detectar Narvales alineados y huir inmediatamente</li>
+ *   <li>Si hay enemigo cercano (radio 4), intentar bloquear con hielo o huir</li>
+ *   <li>Buscar y perseguir la fruta mas cercana</li>
+ *   <li>Moverse aleatoriamente si no hay objetivos</li>
+ * </ol>
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Reconoce amenazas especiales (Narval alineado)</li>
+ *   <li>No crea hielo contra Narval ni Calamar (rompen hielo)</li>
+ *   <li>Balancea supervivencia con recoleccion</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BotPlayer
+ * @see PlayerType#MACHINE_EXPERT
  */
 public class ExpertBot extends BotPlayer {
 

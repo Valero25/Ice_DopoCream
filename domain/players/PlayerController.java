@@ -12,6 +12,26 @@ import domain.shared.BadOpoLogger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador que gestiona todos los jugadores activos en el juego.
+ * Maneja la creacion, movimiento, habilidades y actualizacion de IA de bots.
+ * 
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *   <li>Crear jugadores (humanos y bots) con configuracion especifica</li>
+ *   <li>Procesar acciones de movimiento y habilidades</li>
+ *   <li>Gestionar la logica de creacion/destruccion de hielo en hilera</li>
+ *   <li>Actualizar la IA de jugadores maquina</li>
+ *   <li>Proporcionar informacion visual para la GUI</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see IceCream
+ * @see BotPlayer
+ * @see BoardController
+ * @see ItemController
+ */
 public class PlayerController implements java.io.Serializable {
 
     private BoardController boardCtrl;

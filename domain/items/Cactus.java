@@ -3,11 +3,20 @@ package domain.items;
 import domain.board.BoardController;
 
 /**
- * Cactus: Fruta estática con púas que alternan entre estado peligroso y seguro.
- * - Cada 30 segundos le crecen púas que pueden eliminar al jugador si se
- * acerca.
- * - Después de 30 segundos, vuelve a la normalidad y puede ser recolectado.
- * - Otorga 250 puntos.
+ * Cactus: Fruta especial con puas que alternan entre estado peligroso y seguro.
+ * Otorga 250 puntos al ser recolectado cuando no tiene puas.
+ * 
+ * <p>Comportamiento:</p>
+ * <ul>
+ *   <li>Alterna entre puas (peligroso) y sin puas (seguro) cada 30 segundos</li>
+ *   <li>Cuando tiene puas, elimina al jugador que lo toque</li>
+ *   <li>Solo puede ser recolectado cuando NO tiene puas</li>
+ *   <li>Inicia sin puas (seguro para recolectar)</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Fruit
  */
 public class Cactus extends Fruit {
 

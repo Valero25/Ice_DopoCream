@@ -18,6 +18,35 @@ import domain.shared.BadOpoLogger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controlador principal del dominio que coordina todos los subsistemas del juego.
+ * Actua como fachada (Facade Pattern) entre la capa de presentacion y la logica del juego.
+ * 
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *   <li>Coordinar los sub-controladores (Board, Items, Enemies, Players)</li>
+ *   <li>Gestionar el ciclo de vida del juego (inicio, pausa, fin)</li>
+ *   <li>Manejar la configuracion del modo de juego (PVP, PVM, MVM, SINGLE)</li>
+ *   <li>Controlar el sistema de oleadas de frutas</li>
+ *   <li>Gestionar el tiempo y puntuaciones</li>
+ *   <li>Proporcionar persistencia (guardar/cargar partidas)</li>
+ * </ul>
+ * 
+ * <p>Modos de juego disponibles:</p>
+ * <ul>
+ *   <li>SINGLE - Un jugador contra enemigos del mapa</li>
+ *   <li>PVP - Jugador vs Jugador</li>
+ *   <li>PVM - Jugador vs Maquina</li>
+ *   <li>MVM - Maquina vs Maquina</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BoardController
+ * @see EnemyController
+ * @see ItemController
+ * @see PlayerController
+ */
 public class DomainController implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 

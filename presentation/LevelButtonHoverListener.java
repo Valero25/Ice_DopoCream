@@ -4,6 +4,20 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Listener para efectos hover en botones de seleccion de nivel.
+ * Agranda el boton y muestra preview del nivel al pasar el cursor.
+ * 
+ * <p>Efectos al hover:</p>
+ * <ul>
+ *   <li>El boton se agranda ligeramente</li>
+ *   <li>Se muestra un GIF de preview del nivel</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelSelectionPanel
+ */
 public class LevelButtonHoverListener extends MouseAdapter {
     private JButton btn;
     private int x;

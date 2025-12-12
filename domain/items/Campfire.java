@@ -1,5 +1,22 @@
 package domain.items;
 
+/**
+ * Fogata que alterna entre encendida (peligrosa) y apagada (segura).
+ * Cuando esta encendida, elimina al jugador que la toque.
+ * Se puede apagar temporalmente rompiendo hielo sobre ella.
+ * 
+ * <p>Comportamiento:</p>
+ * <ul>
+ *   <li>Inicia encendida (peligrosa)</li>
+ *   <li>Se apaga cuando se rompe hielo sobre ella</li>
+ *   <li>Se reenciende automaticamente despues de 10 segundos</li>
+ *   <li>El jugador puede caminar sobre ella pero muere si esta encendida</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Obstacle
+ */
 public class Campfire extends Obstacle {
 
     private boolean isOn;

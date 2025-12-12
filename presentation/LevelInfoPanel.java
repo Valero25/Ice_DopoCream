@@ -4,6 +4,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Panel que muestra informacion detallada de un nivel seleccionado.
+ * Utilizado en la pantalla de seleccion de niveles.
+ * 
+ * <p>Informacion mostrada:</p>
+ * <ul>
+ *   <li>Nombre del nivel</li>
+ *   <li>Frutas disponibles y cantidades</li>
+ *   <li>Enemigos presentes y cantidades</li>
+ *   <li>Obstaculos y cantidades</li>
+ *   <li>Boton para iniciar partida</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelSelectionPanel
+ */
 public class LevelInfoPanel extends JPanel {
 
     private JButton startButton;

@@ -3,6 +3,27 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel de fin de juego que muestra los resultados de la partida.
+ * Presenta el ganador, puntajes finales y opciones para continuar.
+ * 
+ * <p>Informacion mostrada:</p>
+ * <ul>
+ *   <li>Resultado (Victoria/Derrota/Empate)</li>
+ *   <li>Puntaje de cada jugador</li>
+ *   <li>Estadisticas de la partida</li>
+ * </ul>
+ * 
+ * <p>Opciones disponibles:</p>
+ * <ul>
+ *   <li>Volver a jugar</li>
+ *   <li>Regresar al menu principal</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ */
 public class GameOverPanel extends JPanel {
 
     public GameOverPanel(String gameMode, String result, String winner, int score,
@@ -79,8 +100,8 @@ public class GameOverPanel extends JPanel {
         resultPanel.add(Box.createVerticalStrut(15));
 
         // Botones según el modo
-        if (gameMode.equals("SINGLE") && result.equals("WON") && hasNextLevel) {
-            // En SINGLE con victoria y hay siguiente nivel
+        if (result.equals("WON") && hasNextLevel) {
+            // En cualquier modo con victoria y si hay siguiente nivel
             JButton nextBtn = createResultButton("SIGUIENTE NIVEL");
             nextBtn.addActionListener(e -> onNextLevel.run());
             resultPanel.add(nextBtn);

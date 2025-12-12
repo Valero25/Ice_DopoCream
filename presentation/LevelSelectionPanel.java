@@ -3,6 +3,23 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel para la seleccion de niveles del juego.
+ * Muestra los niveles disponibles y permite elegir uno o crear nivel personalizado.
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Grid de niveles predefinidos con imagenes preview</li>
+ *   <li>Informacion de cada nivel (dificultad, objetivos)</li>
+ *   <li>Opcion para nivel personalizado (LevelConfig)</li>
+ *   <li>Efectos hover en la seleccion</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelConfigPanel
+ * @see ImageLoader
+ */
 public class LevelSelectionPanel extends JPanel {
     private Image bgImg;
     private ImageLoader loader;
@@ -23,6 +40,10 @@ public class LevelSelectionPanel extends JPanel {
         createLevelBtn("Nivel 1", "LEVEL_1", "Nivel1.png", 550, 180, onLevelSelect);
         createLevelBtn("Nivel 2", "LEVEL_2", "Nivel2.png", 550, 280, onLevelSelect);
         createLevelBtn("Nivel 3", "LEVEL_3", "Nivel3.png", 550, 380, onLevelSelect);
+
+        // --- AQUI SE CREA EL NUEVO BOTON NIVEL 4 ---
+        // Se coloca en X=720, Y=380 (al lado del Nivel 3)
+        createLevelBtn("Nivel 4", "LEVEL_4", "Nivel4.png", 720, 380, onLevelSelect);
 
         // Botón Back
         JButton back = new JButton("BACK");

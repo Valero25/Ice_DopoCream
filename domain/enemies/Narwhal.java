@@ -2,6 +2,23 @@ package domain.enemies;
 
 import domain.shared.Direction;
 
+/**
+ * Enemigo Narval (Narwhal) con capacidad de embestida.
+ * Cuando se alinea horizontal o verticalmente con el jugador,
+ * entra en modo embestida con alta velocidad. Puede romper hielo mientras embiste.
+ * 
+ * <p>Caracteristicas:</p>
+ * <ul>
+ *   <li>Velocidad normal: ~3.3 movimientos por segundo</li>
+ *   <li>Velocidad embestida: ~16 movimientos por segundo</li>
+ *   <li>Puede romper bloques de hielo solo durante la embestida</li>
+ *   <li>Al chocar con un muro, termina la embestida e invierte direccion</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Enemy
+ */
 public class Narwhal extends Enemy {
 
     private Direction currentDir;

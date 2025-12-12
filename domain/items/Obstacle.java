@@ -1,5 +1,23 @@
 package domain.items;
 
+/**
+ * Clase abstracta base para todos los obstaculos del juego.
+ * Los obstaculos bloquean el movimiento de jugadores y/o enemigos.
+ * 
+ * <p>Tipos de obstaculos disponibles:</p>
+ * <ul>
+ *   <li>IceBlock - Bloque de hielo destructible</li>
+ *   <li>Campfire (Fogata) - Causa muerte al tocarlo cuando esta encendida</li>
+ *   <li>HotTile (Baldosa Caliente) - Derrite bloques de hielo sobre ella</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Item
+ * @see IceBlock
+ * @see Campfire
+ * @see HotTile
+ */
 public abstract class Obstacle extends Item {
 
     public Obstacle(String id, int x, int y) {

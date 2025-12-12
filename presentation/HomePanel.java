@@ -3,6 +3,21 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel del menu principal del juego.
+ * Muestra las opciones principales: Jugar, Abrir partida y Salir.
+ * 
+ * <p>Elementos visuales:</p>
+ * <ul>
+ *   <li>Imagen de fondo animada</li>
+ *   <li>Tablero de menu con botones estilizados</li>
+ *   <li>Efectos hover en botones</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ */
 public class HomePanel extends JPanel {
     private Image bgImg;
     private Image menuImg;

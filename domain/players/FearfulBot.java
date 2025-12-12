@@ -6,9 +6,21 @@ import domain.shared.EntityInfo;
 import java.util.List;
 
 /**
- * Bot que huye de los enemigos.
- * Estrategia: Si hay enemigo cerca, huir. Si es seguro, poner hielo como
- * barrera.
+ * Bot Miedoso que prioriza huir de los enemigos.
+ * Utiliza la habilidad de crear hielo como barrera defensiva.
+ * 
+ * <p>Estrategia:</p>
+ * <ul>
+ *   <li>Si hay enemigo cerca (radio 5), intenta huir</li>
+ *   <li>Puede crear barreras de hielo cuando esta alineado con enemigos</li>
+ *   <li>No crea hielo contra Narval (rompe hielo cargando) ni Calamar cercano</li>
+ *   <li>Si es seguro, se mueve aleatoriamente</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BotPlayer
+ * @see PlayerType#MACHINE_FEARFUL
  */
 public class FearfulBot extends BotPlayer {
 

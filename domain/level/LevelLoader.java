@@ -9,6 +9,34 @@ import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Cargador de niveles que parsea mapas de texto y configura el juego.
+ * Gestiona la creacion de entidades segun la configuracion personalizada
+ * y el sistema de oleadas de frutas.
+ * 
+ * <p>Codigos del mapa de texto:</p>
+ * <ul>
+ *   <li># - Muro indestructible</li>
+ *   <li>P - Posicion inicial del jugador</li>
+ *   <li>. - Espacio vacio</li>
+ *   <li>I - Bloque de hielo inicial</li>
+ *   <li>C - Fogata</li>
+ *   <li>H - Baldosa caliente</li>
+ * </ul>
+ * 
+ * <p>Responsabilidades:</p>
+ * <ul>
+ *   <li>Parsear el mapa de texto y crear la estructura del tablero</li>
+ *   <li>Aplicar configuracion personalizada de enemigos y obstaculos</li>
+ *   <li>Gestionar oleadas de frutas segun la configuracion</li>
+ *   <li>Validar posiciones de spawn para evitar superposiciones</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelConfiguration
+ * @see BoardController
+ */
 public class LevelLoader implements java.io.Serializable {
 
     private Random random;

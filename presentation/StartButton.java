@@ -4,6 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Boton estilizado para iniciar acciones principales.
+ * Extiende JButton con estilos visuales personalizados.
+ * 
+ * <p>Caracteristicas visuales:</p>
+ * <ul>
+ *   <li>Texto blanco sobre fondo transparente</li>
+ *   <li>Fuente Arial Bold 26pt</li>
+ *   <li>Cursor de mano al pasar</li>
+ *   <li>Sin bordes pintados</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ */
 public class StartButton extends JButton {
     public StartButton(String text, ActionListener action) {
         super(text);

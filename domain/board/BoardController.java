@@ -6,6 +6,24 @@ import domain.shared.BadOpoException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controlador principal del tablero de juego.
+ * Gestiona la matriz de celdas, validaciones de posiciones,
+ * creacion/destruccion de bloques de hielo y animaciones domino.
+ * 
+ * <p>Responsabilidades principales:</p>
+ * <ul>
+ *   <li>Mantener el estado del tablero (matriz de celdas)</li>
+ *   <li>Validar movimientos y posiciones</li>
+ *   <li>Gestionar bloques de hielo (crear/romper)</li>
+ *   <li>Controlar animaciones visuales del efecto domino</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Cell
+ * @see AnimationEntry
+ */
 public class BoardController implements java.io.Serializable {
 
     private int width;

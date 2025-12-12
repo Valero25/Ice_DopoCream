@@ -7,9 +7,28 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Listener unificado para manejar interacciones de mouse estándar
- * (Hover de color, borde, fuente y Clics simples).
- * Reemplaza múltiples clases pequeñas de Listeners.
+ * Listener unificado para manejar interacciones de mouse estandar.
+ * Soporta efectos hover (color, borde, fuente) y clics simples.
+ * Reemplaza multiples clases pequenas de Listeners.
+ * 
+ * <p>Efectos hover soportados:</p>
+ * <ul>
+ *   <li>Cambio de color de fondo</li>
+ *   <li>Cambio de color de texto</li>
+ *   <li>Cambio de borde</li>
+ *   <li>Cambio de fuente</li>
+ * </ul>
+ * 
+ * <p>Uso tipico:</p>
+ * <pre>
+ * new StandardMouseListener.Builder(button)
+ *     .hoverBackground(Color.BLUE, Color.CYAN)
+ *     .onClick(() -> doAction())
+ *     .build();
+ * </pre>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
  */
 public class StandardMouseListener extends MouseAdapter {
 

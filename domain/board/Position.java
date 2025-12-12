@@ -2,6 +2,15 @@ package domain.board;
 
 import java.io.Serializable;
 
+/**
+ * Representa una posicion en el tablero de juego mediante coordenadas X e Y.
+ * Clase inmutable utilizada para almacenar y comparar posiciones en el grid.
+ * Implementa equals() y hashCode() para permitir su uso en colecciones.
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BoardController
+ */
 class Position implements Serializable {
     private static final long serialVersionUID = 1L;
     private int x;

@@ -6,6 +6,23 @@ import java.awt.*;
 /**
  * Panel de fondo unificado con estilos predefinidos.
  * Reemplaza InfoBackgroundPanel, PausePanelBackground, ResultBackgroundPanel.
+ * 
+ * <p>Estilos disponibles:</p>
+ * <ul>
+ *   <li>WINTER - Gradiente celeste + copos de nieve (pantalla Info)</li>
+ *   <li>DARK_OVERLAY - Negro semi-transparente (pantalla Pausa)</li>
+ *   <li>RESULT - Gradiente oscuro + borde amarillo (pantalla Resultados)</li>
+ * </ul>
+ * 
+ * <p>Caracteristicas visuales:</p>
+ * <ul>
+ *   <li>Gradientes personalizados segun estilo</li>
+ *   <li>Efectos decorativos (copos de nieve)</li>
+ *   <li>Bordes estilizados</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
  */
 public class StandardBackgroundPanel extends JPanel {
 

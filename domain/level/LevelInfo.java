@@ -1,5 +1,22 @@
 package domain.level;
 
+/**
+ * Clase que almacena la informacion predefinida de cada nivel.
+ * Contiene los tipos y cantidades de frutas y enemigos para niveles estandar.
+ * Utilizada para obtener configuraciones por defecto de cada nivel.
+ * 
+ * <p>Niveles predefinidos:</p>
+ * <ul>
+ *   <li>LEVEL_1: Uvas y Bananas con 2 Trolls</li>
+ *   <li>LEVEL_2: Piñas y Cerezas con Calamares y Maceta</li>
+ *   <li>LEVEL_3: Uvas, Piñas y Cerezas con Troll, Calamar y Narval</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see LevelLoader
+ * @see LevelConfiguration
+ */
 public class LevelInfo {
     private String[] fruitTypes;
     private int[] fruitCounts;

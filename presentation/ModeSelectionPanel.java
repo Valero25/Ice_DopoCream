@@ -3,6 +3,22 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel para seleccionar el modo de juego.
+ * Permite elegir entre los diferentes modos disponibles.
+ * 
+ * <p>Modos disponibles:</p>
+ * <ul>
+ *   <li>SINGLE - Un jugador contra enemigos</li>
+ *   <li>PVP - Jugador vs Jugador</li>
+ *   <li>PVM - Jugador vs Maquina</li>
+ *   <li>MVM - Maquina vs Maquina</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ */
 public class ModeSelectionPanel extends JPanel {
     private Image bgImg;
 

@@ -1,9 +1,22 @@
 package domain.shared;
 
+/**
+ * Enumeracion que representa los posibles estados del juego.
+ * Utilizada para controlar el flujo del juego y determinar acciones disponibles.
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see domain.game.DomainController
+ */
 public enum GameStatus {
+    /** Juego en curso, procesando logica y input */
     PLAYING,
-    PAUSED, // Requisito funcional: Permitir pausar [cite: 84]
-    WON, // Mensaje de victoria [cite: 86]
-    GAME_OVER, // Si un enemigo toca al helado [cite: 76]
-    TIMEOUT // Si se agotan los 3 minutos [cite: 77]
+    /** Juego pausado, no procesa logica ni tiempo */
+    PAUSED,
+    /** Victoria: Se recolectaron todas las frutas */
+    WON,
+    /** Game Over: Un enemigo toco al jugador */
+    GAME_OVER,
+    /** Tiempo agotado: Se acabaron los 3 minutos */
+    TIMEOUT
 }

@@ -3,6 +3,20 @@ package domain.items;
 import domain.board.BoardController;
 import java.util.Random;
 
+/**
+ * Fruta Cereza que se teletransporta periodicamente.
+ * Otorga 150 puntos al ser recolectada.
+ * 
+ * <p>Comportamiento especial:</p>
+ * <ul>
+ *   <li>Cada 20 segundos se teletransporta a una posicion aleatoria valida</li>
+ *   <li>El teletransporte solo ocurre cuando el jugador se mueve</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see Fruit
+ */
 public class Cherry extends Fruit {
 
     private Random random;

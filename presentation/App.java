@@ -4,6 +4,23 @@ import domain.game.DomainController;
 import javax.swing.SwingUtilities;
 import domain.shared.BadOpoLogger;
 
+/**
+ * Clase principal de la aplicacion Bad DOPO Cream.
+ * Punto de entrada que inicializa el controlador del dominio y la interfaz grafica.
+ * 
+ * <p>Responsabilidades:</p>
+ * <ul>
+ *   <li>Configurar optimizaciones graficas del sistema</li>
+ *   <li>Instanciar el controlador del dominio</li>
+ *   <li>Crear y mostrar la ventana principal de la GUI</li>
+ *   <li>Manejar errores fatales de inicializacion</li>
+ * </ul>
+ * 
+ * @author Diego Montes y Juan David Valero
+ * @version 1.0
+ * @see BadOpoGUI
+ * @see DomainController
+ */
 public class App {
     public static void main(String[] args) {
         // Optimización gráfica para evitar parpadeos en algunos sistemas
