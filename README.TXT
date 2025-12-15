@@ -9,4 +9,4 @@ PURPOSE OF PROJECT: The goal of DOPO's final project will be to create a version
 • Variety of fruits
 • Variety of obstacles
 AUTHORS: Diego Montes and Juan David Valero
-USER INSTRUCTIONS:
+
