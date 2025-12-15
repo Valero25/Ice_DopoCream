@@ -24,6 +24,10 @@ public class LevelSelectionPanel extends JPanel {
         createLevelBtn("Nivel 2", "LEVEL_2", "Nivel2.png", 550, 280, onLevelSelect);
         createLevelBtn("Nivel 3", "LEVEL_3", "Nivel3.png", 550, 380, onLevelSelect);
 
+        // --- AQUI SE CREA EL NUEVO BOTON NIVEL 4 ---
+        // Se coloca debajo del Nivel 3, en la misma columna
+        createLevelBtn("Nivel 4", "LEVEL_4", "Nivel4.png", 550, 480, onLevelSelect);
+
         // Botón Back
         JButton back = new JButton("BACK");
         back.setBounds(50, 600, 100, 40);

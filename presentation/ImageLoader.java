@@ -67,15 +67,15 @@ public class ImageLoader {
             case "MENU_BOARD":
                 path = "/presentation/menu.png";
                 break;
-                
+
             case "LEVEL_1":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
-                
+
             case "LEVEL_2":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
-                
+
             case "LEVEL_3":
                 path = "/presentation/fondogeneralnivel.png";
                 break;
@@ -102,7 +102,7 @@ public class ImageLoader {
     public String getPath(String key, String sub) {
         // Helper para ModeSelectionPanel y LevelSelectionPanel
         if (key.equals("BTN_SINGLE"))
-            return "/presentation/Boton S.png";
+            return "/presentation/BotonJvJ.gif";
         if (key.equals("BTN_PVP"))
             return "/presentation/BotonJvJ.gif";
         if (key.equals("BTN_PVM"))
@@ -177,8 +177,10 @@ public class ImageLoader {
                 break;
 
             case "CAMPFIRE":
-            case "CAMPFIRE_OFF":
                 path = "/presentation/fogata.png";
+                break;
+            case "CAMPFIRE_OFF":
+                path = "/presentation/fogataazul.png";
                 break;
 
             case "HOT_TILE":
@@ -249,6 +251,10 @@ public class ImageLoader {
                     file = "DownDrill3.gif"; // Selección en menú
                 else
                     file = "Patada animation.gif";
+                break;
+
+            case "DEATH": // Estado Muerte
+                file = "Muerte animation.gif";
                 break;
         }
         return "/presentation/" + folder + "/" + file;

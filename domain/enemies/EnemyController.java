@@ -14,10 +14,13 @@ public class EnemyController implements java.io.Serializable {
     private ItemController itemCtrl; // Necesario para gestionar rotura de hielo
     private List<Enemy> enemies;
 
-    // Guardamos la posición del jugador para que los enemigos perseguidores
-    // (Maceta/Calamar) sepan a dónde ir
-    private int playerX;
-    private int playerY;
+    // Guardamos las posiciones de ambos jugadores
+    private int player1X = -1;
+    private int player1Y = -1;
+    private int player2X = -1;
+    private int player2Y = -1;
+    private boolean player1Alive = false;
+    private boolean player2Alive = false;
 
     public EnemyController(BoardController boardCtrl, ItemController itemCtrl) {
         this.boardCtrl = boardCtrl;
@@ -39,12 +42,52 @@ public class EnemyController implements java.io.Serializable {
     }
 
     /**
-     * Actualiza la referencia de dónde está el jugador.
-     * Debe llamarse en cada ciclo del juego antes de updateEnemies.
+     * Actualiza la posición del jugador 1.
      */
     public void updatePlayerPos(int x, int y) {
-        this.playerX = x;
-        this.playerY = y;
+        this.player1X = x;
+        this.player1Y = y;
+        this.player1Alive = true;
+    }
+
+    /**
+     * Actualiza las posiciones de ambos jugadores.
+     */
+    public void updatePlayerPositions(int p1x, int p1y, boolean p1Alive, int p2x, int p2y, boolean p2Alive) {
+        this.player1X = p1x;
+        this.player1Y = p1y;
+        this.player1Alive = p1Alive;
+        this.player2X = p2x;
+        this.player2Y = p2y;
+        this.player2Alive = p2Alive;
+    }
+
+    /**
+     * Obtiene la posición del jugador más cercano a la posición dada.
+     */
+    private int[] getClosestPlayerPos(int fromX, int fromY) {
+        int targetX = -1;
+        int targetY = -1;
+        double minDist = Double.MAX_VALUE;
+
+        if (player1Alive && player1X >= 0) {
+            double dist1 = Math.abs(player1X - fromX) + Math.abs(player1Y - fromY);
+            if (dist1 < minDist) {
+                minDist = dist1;
+                targetX = player1X;
+                targetY = player1Y;
+            }
+        }
+
+        if (player2Alive && player2X >= 0) {
+            double dist2 = Math.abs(player2X - fromX) + Math.abs(player2Y - fromY);
+            if (dist2 < minDist) {
+                targetX = player2X;
+                targetY = player2Y;
+            }
+        }
+
+        return new int[] { targetX, targetY };
     }
 
     /**
@@ -57,8 +100,19 @@ public class EnemyController implements java.io.Serializable {
             if (!e.canMove())
                 continue;
 
+            // Obtener posición del jugador más cercano a este enemigo
+            int[] targetPos = getClosestPlayerPos(e.getX(), e.getY());
+            int targetX = targetPos[0];
+            int targetY = targetPos[1];
+
+            // Si no hay jugadores válidos, el enemigo no hace nada
+            if (targetX < 0 || targetY < 0) {
+                e.resetTimer();
+                continue;
+            }
+
             // 1. El enemigo decide a dónde QUIERE ir (polimorfismo)
-            Direction intent = e.decideMove(false, playerX, playerY);
+            Direction intent = e.decideMove(false, targetX, targetY);
 
             if (intent == Direction.NONE) {
                 e.resetTimer();
@@ -84,7 +138,7 @@ public class EnemyController implements java.io.Serializable {
             if (!blocked && !obstacle) {
                 e.setPosition(nextX, nextY);
             } else {
-                e.decideMove(true, playerX, playerY); // Notifica bloqueo al enemigo
+                e.decideMove(true, targetX, targetY); // Notifica bloqueo al enemigo
             }
             e.resetTimer();
         }
@@ -125,9 +179,12 @@ public class EnemyController implements java.io.Serializable {
      */
     public void reset() {
         enemies.clear();
-        // Opcional: Resetear coordenadas del target para evitar comportamientos raros
-        // en el primer frame
-        this.playerX = -1;
-        this.playerY = -1;
+        // Resetear coordenadas de ambos jugadores
+        this.player1X = -1;
+        this.player1Y = -1;
+        this.player2X = -1;
+        this.player2Y = -1;
+        this.player1Alive = false;
+        this.player2Alive = false;
     }
 }

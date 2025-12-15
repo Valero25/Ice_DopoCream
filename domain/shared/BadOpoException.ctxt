@@ -1,7 +1,0 @@
-#BlueJ class context
-comment0.target=BadOpoException
-comment1.params=message
-comment1.target=BadOpoException(java.lang.String)
-comment2.params=message\ cause
-comment2.target=BadOpoException(java.lang.String,\ java.lang.Throwable)
-numComments=3

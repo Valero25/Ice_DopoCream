@@ -294,19 +294,23 @@ public class BadOpoGUI extends JFrame {
                 () -> {
                     // Limpiar configuraciones al volver al menú
                     levelConfigurations.clear();
+                    hideGameOverOverlay();
                     cardLayout.show(mainPanel, "HOME");
                 },
                 () -> {
                     // Limpiar configuraciones al ir a selección de niveles
                     levelConfigurations.clear();
+                    hideGameOverOverlay();
                     showLevelSelection();
                 },
                 () -> {
                     // SIGUIENTE NIVEL - usar configuración guardada o heredada
+                    hideGameOverOverlay();
                     advanceToNextLevel();
                 },
                 () -> {
                     // REINICIAR NIVEL
+                    hideGameOverOverlay();
                     restartCurrentLevel();
                 },
                 () -> {
@@ -315,8 +319,11 @@ public class BadOpoGUI extends JFrame {
                 hasNext,
                 playerName);
 
-        mainPanel.add(gameOverPanel, "GAME_OVER");
-        cardLayout.show(mainPanel, "GAME_OVER");
+        // Mostrar como overlay encima del juego (como la pausa)
+        gameOverPanel.setBounds(0, 0, activeGamePanel.getWidth(), activeGamePanel.getHeight());
+        activeGamePanel.add(gameOverPanel);
+        activeGamePanel.revalidate();
+        activeGamePanel.repaint();
     }
 
     private String getGameMode() {
@@ -408,19 +415,9 @@ public class BadOpoGUI extends JFrame {
 
     /**
      * Reinicia el nivel actual con la misma configuración.
-     * En modo SINGLE: Si se perdió, vuelve a LEVEL_1.
      */
     private void restartCurrentLevel() {
-        String gameMode = domain.getGameMode();
-        GameStatus lastStatus = domain.getGameStatus();
-
-        // En modo SINGLE, si perdiste vuelves al nivel 1
-        if ("SINGLE".equals(gameMode) && lastStatus == GameStatus.GAME_OVER) {
-            restartFromLevel1();
-            return;
-        }
-
-        // En otros modos o si ganaste, reinicia el mismo nivel
+        // Reiniciar el mismo nivel en todos los modos
         if (currentLevelConfig == null) {
             currentLevelConfig = getConfigurationForLevel(currentLevel);
         }
@@ -532,6 +529,22 @@ public class BadOpoGUI extends JFrame {
         activeGamePanel.requestFocus();
     }
 
+    /**
+     * Oculta el overlay de game over removiéndolo del panel de juego.
+     */
+    private void hideGameOverOverlay() {
+        if (activeGamePanel == null)
+            return;
+        Component[] components = activeGamePanel.getComponents();
+        for (Component comp : components) {
+            if (comp.getClass().getSimpleName().equals("GameOverPanel")) {
+                activeGamePanel.remove(comp);
+            }
+        }
+        activeGamePanel.revalidate();
+        activeGamePanel.repaint();
+    }
+
     // =============================================================
     // PERSISTENCIA
     // =============================================================
@@ -626,16 +639,15 @@ public class BadOpoGUI extends JFrame {
             // Nivel 2: Oleada 1: 8 Piñas, Oleada 2: 8 Cerezas
             // Enemigos: 2 Calamares, 1 Maceta
             return new String[] {
-                    "##################",
-                    "#P.A.A.A.A.......#",
-                    "#................#",
-                    "#....S...........#",
-                    "#................#",
-                    "#.A.A.A.A....F...#",
-                    "#................#",
-                    "#........S.......#",
-                    "#................#",
-                    "##################"
+                    "#IIIIIIIIIIIIIIII#",
+                    "I................I",
+                    "I.I.I.I.ITI.I.I..I",
+                    "I................I",
+                    "I.I....G.G....I..I",
+                    "I...G.....T......I",
+                    "I.I.I.I.I.I.I.I..I",
+                    "I................I",
+                    "#IIIIIIIIIIIIIIII#"
             };
         }
 
@@ -643,32 +655,30 @@ public class BadOpoGUI extends JFrame {
             // Nivel 3: Oleada 1: 8 Uvas, Oleada 2: 4 Piñas + 4 Cerezas
             // Enemigos: 1 Troll, 1 Calamar, 1 Narval
             return new String[] {
-                    "##################",
-                    "#P.G.G.G.G.......#",
-                    "#................#",
-                    "#....T...........#",
-                    "#................#",
-                    "#.G.G.G.G....S...#",
-                    "#................#",
-                    "#........N.......#",
-                    "#................#",
-                    "##################"
+                    "I.......II.......I",
+                    "I.......II....T..I",
+                    "I.....IIIIIII....I",
+                    "I.....IIIIIII....I",
+                    "IIIIIIIIIIIIIIIIII",
+                    "I...G.IIIIIII....I",
+                    "I.....IIIIIII....I",
+                    "I..G....II....G..I",
+                    "I.......II.....T.I"
             };
         }
 
         // Nivel 1: Oleada 1: 8 Uvas, Oleada 2: 8 Bananas
         // Enemigos: 2 Trolls
         return new String[] {
-                "##################",
-                "#P.G.G.G.G.......#",
-                "#................#",
-                "#.......T........#",
-                "#................#",
-                "#.G.G.G.G........#",
-                "#................#",
-                "#............T...#",
-                "#................#",
-                "##################"
+                "#IIIIIIIIIIIIIIII#",
+                "I................I",
+                "I........T.......I",
+                "I....II....II....I",
+                "I.G..I.G.G..I....I",
+                "I....II....II....I",
+                "I...........T....I",
+                "I................I",
+                "#IIIIIIIIIIIIIIII#"
         };
     }
 }

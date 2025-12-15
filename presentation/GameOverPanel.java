@@ -10,10 +10,11 @@ public class GameOverPanel extends JPanel {
             Runnable onRestartLevel, Runnable onExit, boolean hasNextLevel,
             String playerName) {
         setLayout(new GridBagLayout());
+        setOpaque(false); // Permitir ver el juego detrás
 
         // Panel central
-        // Panel central
-        StandardBackgroundPanel resultPanel = new StandardBackgroundPanel(StandardBackgroundPanel.Style.RESULT);
+        // Panel central con fondo semi-transparente (como la pausa)
+        StandardBackgroundPanel resultPanel = new StandardBackgroundPanel(StandardBackgroundPanel.Style.DARK_OVERLAY);
 
         // Título según resultado
         JLabel titleLabel = new JLabel();
@@ -79,8 +80,8 @@ public class GameOverPanel extends JPanel {
         resultPanel.add(Box.createVerticalStrut(15));
 
         // Botones según el modo
-        if (gameMode.equals("SINGLE") && result.equals("WON") && hasNextLevel) {
-            // En SINGLE con victoria y hay siguiente nivel
+        if (result.equals("WON") && hasNextLevel) {
+            // En cualquier modo con victoria y si hay siguiente nivel
             JButton nextBtn = createResultButton("SIGUIENTE NIVEL");
             nextBtn.addActionListener(e -> onNextLevel.run());
             resultPanel.add(nextBtn);
@@ -125,14 +126,5 @@ public class GameOverPanel extends JPanel {
                 new Color(80, 150, 200)));
 
         return btn;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // Fondo semi-transparente
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(0, 0, 0, 200));
-        g2.fillRect(0, 0, getWidth(), getHeight());
     }
 }

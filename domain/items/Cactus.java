@@ -11,7 +11,7 @@ import domain.board.BoardController;
  */
 public class Cactus extends Fruit {
 
-    private static final float SPIKE_INTERVAL = 30.0f; // 30 segundos entre cambios de estado
+    private static final float SPIKE_INTERVAL = 5.0f; // 30 segundos entre cambios de estado
     private static final int CACTUS_SCORE = 250;
 
     private float stateTimer;

@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=ModeSelectionPanel
-comment1.params=loader\ onModeSelect\ onBack
-comment1.target=ModeSelectionPanel(ImageLoader,\ java.util.function.Consumer,\ java.lang.Runnable)
-comment2.params=loader\ imgKey\ x\ y\ callback\ modeKey
-comment2.target=void\ createModeButton(ImageLoader,\ java.lang.String,\ int,\ int,\ java.util.function.Consumer,\ java.lang.String)
-comment3.params=g
-comment3.target=void\ paintComponent(java.awt.Graphics)
-numComments=4

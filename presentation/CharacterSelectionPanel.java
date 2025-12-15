@@ -3,6 +3,7 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CharacterSelectionPanel extends JPanel {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         add(titleLabel, BorderLayout.NORTH);
 
-        charactersPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 100));
+        charactersPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 200));
         charactersPanel.setOpaque(false);
         add(charactersPanel, BorderLayout.CENTER);
 
@@ -50,33 +51,24 @@ public class CharacterSelectionPanel extends JPanel {
     }
 
     private void startSelectionFlow() {
-        // Paso 1: P1 Flavor (Siempre se pide)
-        titleLabel.setText("PLAYER 1: CHOOSE FLAVOR");
-        showOptions(Arrays.asList("CHOCOLATE", "VANILLA", "STRAWBERRY"), true, this::handleP1Flavor);
-    }
-
-    private void handleP1Flavor(String selection) {
-        p1Flavor = selection;
-
-        // Pedir nombre para P1
+        // Paso 1: Nombre + Helado en la misma pantalla
         if (mode.equals("MVM")) {
-            // En MVM, P1 es máquina, pedir nombre
-            showNameInput("PLAYER 1 (Machine): ENTER NAME", this::handleP1Name);
+            showNameAndFlavor("PLAYER 1 (Machine): ENTER NAME", this::handleP1Complete);
         } else {
-            // P1 es humano
-            showNameInput("PLAYER 1: ENTER YOUR NAME", this::handleP1Name);
+            showNameAndFlavor("PLAYER 1: ENTER NAME", this::handleP1Complete);
         }
     }
 
-    private void handleP1Name(String name) {
+    private void handleP1Complete(String name, String flavor) {
         p1Name = name;
+        p1Flavor = flavor;
 
         if (mode.equals("MVM")) {
-            // Paso 2: P1 Difficulty
-            titleLabel.setText("PLAYER 1: CHOOSE DIFFICULTY");
+            // P1 es máquina, necesita elegir dificultad
+            titleLabel.setText(p1Name + ": CHOOSE DIFFICULTY");
             showOptions(Arrays.asList("HUNGRY", "FEARFUL", "EXPERT"), false, this::handleP1Diff);
         } else {
-            // SINGLE, PVP, PVM (P1 es humano, no hay dificultad)
+            // SINGLE, PVP, PVM - P1 es humano, pasar al siguiente paso
             checkNextStep();
         }
     }
@@ -98,39 +90,26 @@ public class CharacterSelectionPanel extends JPanel {
             return;
         }
 
-        // Si no, toca elegir P2
+        // Si no, toca elegir P2 (nombre + helado en la misma pantalla)
         if (p2Flavor == null) {
             if (mode.equals("PVM")) {
-                // En PVM, la máquina es un helado, no un enemigo
-                titleLabel.setText("MACHINE: CHOOSE FLAVOR");
-                showOptions(Arrays.asList("CHOCOLATE", "VANILLA", "STRAWBERRY"), true, this::handleP2Flavor);
+                showNameAndFlavor("MACHINE: ENTER NAME", this::handleP2Complete);
+            } else if (mode.equals("MVM")) {
+                showNameAndFlavor("PLAYER 2 (Machine): ENTER NAME", this::handleP2Complete);
             } else {
-                titleLabel.setText("PLAYER 2: CHOOSE FLAVOR");
-                showOptions(Arrays.asList("CHOCOLATE", "VANILLA", "STRAWBERRY"), true, this::handleP2Flavor);
+                // PVP
+                showNameAndFlavor("PLAYER 2: ENTER NAME", this::handleP2Complete);
             }
         }
     }
 
-    private void handleP2Flavor(String selection) {
-        p2Flavor = selection;
-
-        // Pedir nombre para P2
-        if (mode.equals("PVM")) {
-            showNameInput("MACHINE: ENTER NAME", this::handleP2Name);
-        } else if (mode.equals("MVM")) {
-            showNameInput("PLAYER 2 (Machine): ENTER NAME", this::handleP2Name);
-        } else {
-            // PVP
-            showNameInput("PLAYER 2: ENTER YOUR NAME", this::handleP2Name);
-        }
-    }
-
-    private void handleP2Name(String name) {
+    private void handleP2Complete(String name, String flavor) {
         p2Name = name;
+        p2Flavor = flavor;
 
         if (mode.equals("MVM") || mode.equals("PVM")) {
-            // En MVM y PVM, la máquina necesita elegir dificultad
-            titleLabel.setText(mode.equals("PVM") ? "MACHINE: CHOOSE DIFFICULTY" : "PLAYER 2: CHOOSE DIFFICULTY");
+            // La máquina necesita elegir dificultad
+            titleLabel.setText(p2Name + ": CHOOSE DIFFICULTY");
             showOptions(Arrays.asList("HUNGRY", "FEARFUL", "EXPERT"), false, this::handleP2Diff);
         } else {
             finish();
@@ -146,46 +125,171 @@ public class CharacterSelectionPanel extends JPanel {
         callback.onSelectionComplete(p1Flavor, p1Difficulty, p2Flavor, p2Difficulty, p1Name, p2Name);
     }
 
-    private void showNameInput(String promptText, Consumer<String> handler) {
+    // Variable temporal para guardar el nombre mientras se elige helado
+    private String tempName = "";
+    private javax.swing.Timer blinkTimer;
+
+    private void showNameAndFlavor(String promptText, BiConsumer<String, String> handler) {
         charactersPanel.removeAll();
         titleLabel.setText(promptText);
 
-        JPanel inputPanel = new JPanel();
-        inputPanel.setOpaque(false);
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        // Resetear nombre temporal para este jugador
+        tempName = "";
 
-        JTextField nameField = new JTextField(15);
-        nameField.setFont(new Font("Arial", Font.PLAIN, 24));
-        nameField.setMaximumSize(new Dimension(300, 50));
-        nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameField.setHorizontalAlignment(JTextField.CENTER);
+        // Panel principal con layout vertical
+        JPanel mainPanel = new JPanel();
+        mainPanel.setOpaque(false);
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        JButton confirmBtn = new JButton("CONFIRM");
-        confirmBtn.setFont(new Font("Arial", Font.BOLD, 20));
-        confirmBtn.setPreferredSize(new Dimension(200, 50));
-        confirmBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        confirmBtn.addActionListener(e -> {
-            String name = nameField.getText().trim();
-            if (name.isEmpty()) {
-                name = "Player";
+        // Label grande para mostrar las letras "volando"
+        JLabel flyingLabel = new JLabel("_");
+        flyingLabel.setFont(new Font("Monospaced", Font.BOLD, 50));
+        flyingLabel.setForeground(new Color(101, 67, 33));
+        flyingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Campo de texto oculto para capturar teclas
+        JTextField hiddenField = new JTextField(15);
+        hiddenField.setOpaque(false);
+        hiddenField.setBorder(null);
+        hiddenField.setForeground(new Color(0, 0, 0, 0));
+        hiddenField.setCaretColor(new Color(0, 0, 0, 0));
+        hiddenField.setFont(new Font("Arial", Font.PLAIN, 1));
+        hiddenField.setMaximumSize(new Dimension(1, 1));
+
+        // Timer para efecto de parpadeo del cursor
+        if (blinkTimer != null)
+            blinkTimer.stop();
+        blinkTimer = new javax.swing.Timer(500, null);
+        final boolean[] showCursor = { true };
+
+        blinkTimer.addActionListener(e -> {
+            showCursor[0] = !showCursor[0];
+            String text = hiddenField.getText();
+            flyingLabel.setText(text.isEmpty() ? "_" : text + (showCursor[0] ? "_" : ""));
+        });
+        blinkTimer.start();
+
+        // Panel para los helados
+        JPanel iceCreamPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
+        iceCreamPanel.setOpaque(false);
+
+        // Lista para poder cambiar los otros helados cuando se selecciona uno
+        java.util.List<JLabel> allLabels = new java.util.ArrayList<>();
+        java.util.Map<JLabel, ImageIcon> deathIcons = new java.util.HashMap<>();
+
+        // Crear botones de helado
+        for (String flavor : Arrays.asList("CHOCOLATE", "VANILLA", "STRAWBERRY")) {
+            ImageIcon idle = loader.getIcon(flavor, "WALK");
+            ImageIcon hover = loader.getIcon(flavor, "HOVER");
+            ImageIcon click = loader.getIcon(flavor, "SELECT");
+            ImageIcon death = loader.getIcon(flavor, "DEATH");
+
+            int size = 110;
+            ImageIcon scaledIdle = scaleIcon(idle, size, size);
+            ImageIcon scaledHover = scaleIcon(hover, size, size);
+            ImageIcon scaledClick = scaleIcon(click, size, size);
+            ImageIcon scaledDeath = scaleIcon(death, size, size);
+
+            JLabel lbl = new JLabel(scaledIdle);
+            lbl.setPreferredSize(new Dimension(size, size));
+            lbl.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            // Guardar icono de muerte para este label
+            deathIcons.put(lbl, scaledDeath);
+            allLabels.add(lbl);
+
+            // Al hacer click, guardar nombre + helado (solo si hay nombre)
+            lbl.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if (tempName.trim().isEmpty())
+                        return; // No permitir si no hay nombre
+                    if (blinkTimer != null)
+                        blinkTimer.stop();
+
+                    // Mostrar animación de selección para el elegido
+                    if (scaledClick != null)
+                        lbl.setIcon(scaledClick);
+
+                    // Mostrar animación de muerte para los otros
+                    for (JLabel other : allLabels) {
+                        if (other != lbl) {
+                            ImageIcon otherDeath = deathIcons.get(other);
+                            if (otherDeath != null)
+                                other.setIcon(otherDeath);
+                        }
+                    }
+
+                    // Guardar el nombre antes del delay
+                    final String selectedName = tempName.trim();
+
+                    // Esperar 3 segundos para mostrar la animación antes de continuar
+                    javax.swing.Timer delayTimer = new javax.swing.Timer(3000, evt -> {
+                        handler.accept(selectedName, flavor);
+                    });
+                    delayTimer.setRepeats(false);
+                    delayTimer.start();
+                }
+
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    // Hover siempre activo
+                    if (scaledHover != null)
+                        lbl.setIcon(scaledHover);
+                }
+
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    if (scaledIdle != null)
+                        lbl.setIcon(scaledIdle);
+                }
+
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    if (tempName.trim().isEmpty())
+                        return; // No cambiar sin nombre
+                    if (scaledClick != null)
+                        lbl.setIcon(scaledClick);
+                }
+            });
+
+            iceCreamPanel.add(lbl);
+        }
+
+        // DocumentListener para actualizar el nombre mostrado
+        hiddenField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void update() {
+                String text = hiddenField.getText().toUpperCase();
+                if (text.length() > 10) {
+                    text = text.substring(0, 10);
+                    hiddenField.setText(text);
+                }
+                tempName = text;
+                flyingLabel.setText(text.isEmpty() ? "_" : text + "_");
             }
-            handler.accept(name);
+
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                update();
+            }
         });
 
-        // También permitir Enter para confirmar
-        nameField.addActionListener(e -> confirmBtn.doClick());
+        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(flyingLabel);
+        mainPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(hiddenField);
+        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(iceCreamPanel);
 
-        inputPanel.add(Box.createVerticalStrut(50));
-        inputPanel.add(nameField);
-        inputPanel.add(Box.createVerticalStrut(20));
-        inputPanel.add(confirmBtn);
-
-        charactersPanel.add(inputPanel);
+        charactersPanel.add(mainPanel);
         revalidate();
         repaint();
 
-        // Dar foco al campo de texto
-        SwingUtilities.invokeLater(() -> nameField.requestFocus());
+        // Dar foco al campo oculto
+        SwingUtilities.invokeLater(() -> hiddenField.requestFocus());
     }
 
     // --- GUI HELPERS ---
@@ -193,28 +297,35 @@ public class CharacterSelectionPanel extends JPanel {
     private void showOptions(List<String> options, boolean isIceCream, Consumer<String> handler) {
         charactersPanel.removeAll();
 
+        // Si son opciones de dificultad, usar layout vertical
+        boolean isDifficultyOptions = options.stream().anyMatch(this::isDifficulty);
+
+        if (isDifficultyOptions) {
+            // Layout vertical para botones de dificultad
+            charactersPanel.setLayout(new BoxLayout(charactersPanel, BoxLayout.Y_AXIS));
+            charactersPanel.add(Box.createVerticalGlue());
+        } else {
+            charactersPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 200));
+        }
+
         for (String opt : options) {
-            // Si es dificultad, usamos un icono genérico o texto,
-            // pero por simplicidad reusaremos iconos si existen o texto.
-            // Asumiremos que para HUNGRY/FEARFUL/EXPERT no hay iconos aun,
-            // asi que usaremos botones de texto o iconos de helado genéricos.
-            // Para mantenerlo visual, usaremos iconos de helado (Vainilla) para dificultad
-            // por ahora
-            // O mejor, botones con texto si no hay assets.
-
-            // INTENTO: Cargar icono. Si falla, mostrar texto.
-            // Pero como no tengo assets de dificultad, usaré iconos de helado para
-            // representar dificultad?
-            // No, mejor botones de texto simples para dificultad si no es IceCream/Enemy.
-
             boolean useIcon = isIceCream || isEnemy(opt);
 
             if (useIcon) {
                 addIconBtn(opt, handler);
             } else {
-                addTextBtn(opt, handler);
+                addTextBtn(opt, handler, isDifficultyOptions);
+            }
+
+            if (isDifficultyOptions) {
+                charactersPanel.add(Box.createVerticalStrut(10));
             }
         }
+
+        if (isDifficultyOptions) {
+            charactersPanel.add(Box.createVerticalGlue());
+        }
+
         revalidate();
         repaint();
     }
@@ -223,23 +334,74 @@ public class CharacterSelectionPanel extends JPanel {
         return Arrays.asList("TROLL", "SQUID", "FLOWERPOT", "NARWHAL").contains(s);
     }
 
+    private boolean isDifficulty(String s) {
+        return Arrays.asList("HUNGRY", "FEARFUL", "EXPERT").contains(s);
+    }
+
     private void addIconBtn(String name, Consumer<String> handler) {
         ImageIcon idle = loader.getIcon(name, "WALK");
         ImageIcon hover = loader.getIcon(name, "HOVER");
         ImageIcon click = loader.getIcon(name, "SELECT");
 
-        JLabel lbl = new JLabel(idle);
-        lbl.setPreferredSize(new Dimension(150, 150));
+        // Escalar los GIF a un tamaño más grande
+        int size = 110;
+        ImageIcon scaledIdle = scaleIcon(idle, size, size);
+        ImageIcon scaledHover = scaleIcon(hover, size, size);
+        ImageIcon scaledClick = scaleIcon(click, size, size);
 
-        lbl.addMouseListener(new CharacterIconListener(lbl, idle, hover, click, name, handler));
+        JLabel lbl = new JLabel(scaledIdle);
+        lbl.setPreferredSize(new Dimension(size, size));
+
+        lbl.addMouseListener(new CharacterIconListener(lbl, scaledIdle, scaledHover, scaledClick, name, handler));
 
         charactersPanel.add(lbl);
     }
 
-    private void addTextBtn(String text, Consumer<String> handler) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Arial", Font.BOLD, 20));
-        btn.setPreferredSize(new Dimension(200, 80));
+    private ImageIcon scaleIcon(ImageIcon icon, int width, int height) {
+        if (icon == null)
+            return null;
+        Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        return new ImageIcon(scaled);
+    }
+
+    private void addTextBtn(String text, Consumer<String> handler, boolean largeSize) {
+        JButton btn;
+
+        // Tamaño: grande (350x120) para dificultad, normal (200x80) para otros
+        int width = largeSize ? 350 : 200;
+        int height = largeSize ? 120 : 80;
+
+        // Intentar cargar imagen si es un tipo de dificultad
+        if (isDifficulty(text)) {
+            String imagePath = "/presentation/" + text.toLowerCase() + ".png";
+            java.net.URL url = getClass().getResource(imagePath);
+            if (url != null) {
+                ImageIcon icon = new ImageIcon(url);
+                Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+                btn = new JButton(new ImageIcon(scaled));
+                btn.setContentAreaFilled(false);
+                btn.setBorderPainted(false);
+                btn.setFocusPainted(false);
+            } else {
+                btn = new JButton(text);
+                btn.setFont(new Font("Arial", Font.BOLD, 20));
+            }
+        } else {
+            btn = new JButton(text);
+            btn.setFont(new Font("Arial", Font.BOLD, 20));
+        }
+
+        btn.setPreferredSize(new Dimension(width, height));
+        btn.setMaximumSize(new Dimension(width, height));
+        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Efecto hover: borde amarillo
+        if (isDifficulty(text)) {
+            btn.addMouseListener(StandardMouseListener.onHoverBg(btn, null, null)
+                    .withBorderEffect(Color.YELLOW, 3));
+        }
+
         btn.addActionListener(e -> handler.accept(text));
         charactersPanel.add(btn);
     }

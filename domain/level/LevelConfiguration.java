@@ -52,7 +52,7 @@ public class LevelConfiguration implements java.io.Serializable {
         enemyConfig.put("NARWHAL", 1);
 
         // Obstáculos por defecto
-        obstacleConfig.put("ICE_BLOCK", 3);
+        obstacleConfig.put("ICE_BLOCK", 0);
         obstacleConfig.put("CAMPFIRE", 2);
         obstacleConfig.put("HOT_TILE", 4);
     }

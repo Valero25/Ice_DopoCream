@@ -10,11 +10,14 @@ public class ModeSelectionPanel extends JPanel {
         this.bgImg = loader.getBackgroundImage("MODE"); // FondoModo.png
         setLayout(null);
 
-        // Botones GIF/PNG
-        createModeButton(loader, "BTN_SINGLE", 300, 100, onModeSelect, "SINGLE");
-        createModeButton(loader, "BTN_PVP", 300, 200, onModeSelect, "PVP");
-        createModeButton(loader, "BTN_PVM", 300, 300, onModeSelect, "PVM");
-        createModeButton(loader, "BTN_MVM", 300, 400, onModeSelect, "MVM");
+        // Botones GIF/PNG (separación de 130px) con texto centrado en varias líneas
+        createModeButton(loader, "BTN_SINGLE", 278, 80, onModeSelect, "SINGLE", "<html><center>Single</center></html>");
+        createModeButton(loader, "BTN_PVP", 280, 210, onModeSelect, "PVP",
+                "<html><center>Player<br>vs<br>Player</center></html>");
+        createModeButton(loader, "BTN_PVM", 280, 340, onModeSelect, "PVM",
+                "<html><center>Player<br>vs<br>Machine</center></html>");
+        createModeButton(loader, "BTN_MVM", 280, 470, onModeSelect, "MVM",
+                "<html><center>Machine<br>vs<br>Machine</center></html>");
 
         JButton back = new JButton("BACK");
         back.setBounds(50, 600, 100, 50);
@@ -40,7 +43,7 @@ public class ModeSelectionPanel extends JPanel {
     }
 
     private void createModeButton(ImageLoader loader, String imgKey, int x, int y,
-            java.util.function.Consumer<String> callback, String modeKey) {
+            java.util.function.Consumer<String> callback, String modeKey, String title) {
         JButton btn;
 
         // Intentar cargar la imagen del botón
@@ -49,16 +52,21 @@ public class ModeSelectionPanel extends JPanel {
             try {
                 java.net.URL url = getClass().getResource(path);
                 if (url != null) {
-                    ImageIcon icon = new ImageIcon(url);
-                    btn = new JButton(icon);
+                    ImageIcon originalIcon = new ImageIcon(url);
+                    Image scaledImg = originalIcon.getImage().getScaledInstance(372, 210, Image.SCALE_DEFAULT);
+                    ImageIcon icon = new ImageIcon(scaledImg);
+                    btn = new JButton(title, icon);
+                    btn.setHorizontalTextPosition(SwingConstants.CENTER);
+                    btn.setVerticalTextPosition(SwingConstants.CENTER);
+                    btn.setFont(new Font("Monospaced", Font.BOLD, 24));
+                    btn.setForeground(new Color(101, 67, 33));
                     btn.setBorderPainted(false);
                     btn.setContentAreaFilled(false);
                     btn.setFocusPainted(false);
                     btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
                     // Efecto hover: Agregar un listener que cambie el borde
-                    // Efecto hover: Agregar un listener que cambie el borde
-                    btn.addMouseListener(StandardMouseListener.onHoverBg(btn, null, null) // Dummy for starting
+                    btn.addMouseListener(StandardMouseListener.onHoverBg(btn, null, null)
                             .withBorderEffect(Color.YELLOW, 3));
                 } else {
                     // Fallback: botón con texto y efectos
@@ -73,7 +81,7 @@ public class ModeSelectionPanel extends JPanel {
             btn = createTextButton(modeKey);
         }
 
-        btn.setBounds(x, y, 300, 100);
+        btn.setBounds(x, y, 350, 120);
         btn.addActionListener(e -> callback.accept(modeKey));
         add(btn);
     }

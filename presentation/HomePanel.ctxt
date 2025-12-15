@@ -1,9 +1,0 @@
-#BlueJ class context
-comment0.target=HomePanel
-comment1.params=loader\ onPlay\ onExit
-comment1.target=HomePanel(ImageLoader,\ java.lang.Runnable,\ java.lang.Runnable)
-comment2.params=text\ x\ y\ w\ h\ action
-comment2.target=javax.swing.JButton\ createTextButton(java.lang.String,\ int,\ int,\ int,\ int,\ java.lang.Runnable)
-comment3.params=g
-comment3.target=void\ paintComponent(java.awt.Graphics)
-numComments=4

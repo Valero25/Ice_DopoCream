@@ -40,7 +40,13 @@ public class FearfulBot extends BotPlayer {
             }
         }
 
-        // Si no hay peligro, moverse al azar
+        // Si no hay peligro, ir hacia la fruta más cercana
+        EntityInfo nearestFruit = findNearest(fruits);
+        if (nearestFruit != null) {
+            return getDirectionTowards(nearestFruit.x, nearestFruit.y, canMove);
+        }
+
+        // Si no hay frutas, moverse al azar
         return getRandomValidDirection(canMove);
     }
 

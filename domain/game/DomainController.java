@@ -343,10 +343,18 @@ public class DomainController implements java.io.Serializable {
             return;
         }
 
-        // Informar posición de jugadores a enemigos (solo si hay jugadores vivos)
+        // Informar posición de ambos jugadores a enemigos
         int[] p1Pos = playerCtrl.getPosition("player1");
-        if (p1Pos != null && playerCtrl.isPlayerAlive("player1"))
-            enemyCtrl.updatePlayerPos(p1Pos[0], p1Pos[1]);
+        int[] p2Pos = playerCtrl.getPosition("player2");
+        boolean p1Alive = playerCtrl.isPlayerAlive("player1");
+        boolean p2Alive = playerCtrl.isPlayerAlive("player2");
+
+        int p1x = p1Pos != null ? p1Pos[0] : -1;
+        int p1y = p1Pos != null ? p1Pos[1] : -1;
+        int p2x = p2Pos != null ? p2Pos[0] : -1;
+        int p2y = p2Pos != null ? p2Pos[1] : -1;
+
+        enemyCtrl.updatePlayerPositions(p1x, p1y, p1Alive, p2x, p2y, p2Alive);
 
         // Actualizar lógica
         itemCtrl.updateItems(dt);

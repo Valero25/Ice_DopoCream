@@ -123,31 +123,42 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-        // 1. Fondo del nivel específico
+        // --- DEFINIR ÁREA DE JUEGO ---
+        int hudHeight = 43; // Altura del HUD superior
+        int topMargin = hudHeight; // El área de juego empieza justo debajo del HUD
+
+        // Área total disponible para el fondo
+        int totalWidth = getWidth();
+        int totalHeight = getHeight() - topMargin;
+
+        // 1. Fondo oscuro para el HUD (arriba)
+        g2.setColor(new Color(30, 30, 50));
+        g2.fillRect(0, 0, getWidth(), topMargin);
+
+        // 2. Fondo del nivel específico (cubre todo el área debajo del HUD)
         if (levelBackground != null) {
-            g2.drawImage(levelBackground, 0, 0, getWidth(), getHeight(), this);
+            g2.drawImage(levelBackground, 0, topMargin, totalWidth, totalHeight, this);
         } else {
             // Fallback si no hay fondo del nivel
             g2.setColor(new Color(200, 230, 255));
-            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.fillRect(0, topMargin, totalWidth, totalHeight);
         }
 
-        // --- DEFINIR ÁREA DE JUEGO CON MÁRGENES ---
-        int hudHeight = 40; // Altura del HUD superior
-        int topMargin = hudHeight + 10; // Margen superior mínimo
-        int bottomMargin = 35; // Margen inferior reducido
-        int leftMargin = 50; // Margen izquierdo (espacio para bordes)
-        int rightMargin = 50; // Margen derecho (espacio para bordes)
+        // --- CÁLCULO DE CELDAS AL 50% DEL TAMAÑO ---
+        int fullCellW = totalWidth / cols;
+        int fullCellH = totalHeight / rows;
 
-        // Área disponible para el juego
-        int gameAreaWidth = getWidth() - leftMargin - rightMargin;
-        int gameAreaHeight = getHeight() - topMargin - bottomMargin;
-        int gameAreaX = leftMargin;
-        int gameAreaY = topMargin;
+        // Reducir tamaño de celdas al 95%
+        int cellW = (int) (fullCellW * 0.88);
+        int cellH = (int) (fullCellH * 0.92);
 
-        // --- CÁLCULO DINÁMICO DE CELDAS ---
-        int cellW = gameAreaWidth / cols;
-        int cellH = gameAreaHeight / rows;
+        // Calcular el tamaño total de la matriz reducida
+        int gridTotalWidth = cellW * cols;
+        int gridTotalHeight = cellH * rows;
+
+        // Centrar la matriz en el área de juego (+1 derecha, -2 arriba)
+        int gameAreaX = (totalWidth - gridTotalWidth) / 2 + 1;
+        int gameAreaY = topMargin + (totalHeight - gridTotalHeight) / 2 - 2;
 
         // Limpiar caché si redimensionan
         if (Math.abs(getWidth() - lastWidth) > 50) {
@@ -196,20 +207,6 @@ public class GamePanel extends JPanel {
         // 4. Dibujar Jugadores (separados de la lista de entidades)
         drawPlayer(g2, player1, cellW, cellH, gameAreaX, gameAreaY);
         drawPlayer(g2, player2, cellW, cellH, gameAreaX, gameAreaY);
-
-        // 4. Líneas de Grid (matriz)
-        g2.setColor(new Color(100, 100, 100, 100)); // Gris semi-transparente
-        g2.setStroke(new BasicStroke(1));
-
-        // Líneas verticales
-        for (int x = 0; x <= cols; x++) {
-            g2.drawLine(gameAreaX + x * cellW, gameAreaY, gameAreaX + x * cellW, gameAreaY + rows * cellH);
-        }
-
-        // Líneas horizontales
-        for (int y = 0; y <= rows; y++) {
-            g2.drawLine(gameAreaX, gameAreaY + y * cellH, gameAreaX + cols * cellW, gameAreaY + y * cellH);
-        }
 
         // 5. HUD
         drawHUD(g2);

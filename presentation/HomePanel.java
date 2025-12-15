@@ -12,10 +12,10 @@ public class HomePanel extends JPanel {
         this.menuImg = loader.getBackgroundImage("MENU_BOARD");
         setLayout(null);
 
-        // Botones invisibles sobre la imagen del menú (Coordenadas aproximadas)
-        JButton btnPlay = createTextButton("PLAY", 400, 360, 100, 40, onPlay);
-        JButton btnOpen = createTextButton("OPEN", 400, 420, 100, 40, onOpen);
-        JButton btnExit = createTextButton("EXIT", 400, 480, 100, 40, onExit);
+        // Botones invisibles sobre la imagen del menú (más cercanos)
+        JButton btnPlay = createTextButton("PLAY", 400, 370, 100, 40, onPlay);
+        JButton btnOpen = createTextButton("OPEN", 400, 415, 100, 40, onOpen);
+        JButton btnExit = createTextButton("EXIT", 400, 460, 100, 40, onExit);
 
         add(btnPlay);
         add(btnOpen);
